@@ -97,7 +97,7 @@ export default function Deposit() {
     contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
     functionName: "withdraw",
     params: { usdc_amount: parseInt(number || '0') * 10 ** 6 },
-    network: 'goerli',
+  
   });
 
 
@@ -106,7 +106,7 @@ export default function Deposit() {
     contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
     functionName: "deposit",
     params: { usdc_amount: parseInt(number || '0') * 10 ** 6},
-    network: 'goerli',
+   
   });
 
   const getApprove = useWeb3ExecuteFunction({
@@ -114,7 +114,7 @@ export default function Deposit() {
     contractAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
     functionName: "approve",
     params: { spender: "0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918", amount: parseInt(number || '0') * 10 ** 6 },
-    network: 'goerli',
+  
   });
 
   const getInterestRate
@@ -175,7 +175,7 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USDI supply </Heading>
             </Center>
             <Center textStyle='data'>
-              {getTotalSupply.data / 10 ** 18}  USDI
+              {parseInt(getTotalSupply.data || '0') / 10 ** 18}  USDI
             </Center>
           </Flex>
           <Spacer />
@@ -183,14 +183,14 @@ export default function Deposit() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
             </Center>
-            <Center textStyle='data'> {getUsdcReserve.data * 10 ** 12 / getTotalSupply.data} %</Center>
+            <Center textStyle='data'> {parseInt(getUsdcReserve.data || '0' )* 10 ** 12 / parseInt(getTotalSupply.data || '0')} %</Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > USDC in reserve </Heading></Center>
             <Center textStyle='data'>
-              {getUsdcReserve.data / 10 ** 6} USDC
+              {parseInt(getUsdcReserve.data || '0') / 10 ** 6} USDC
             </Center>
           </Flex>
         </Flex>

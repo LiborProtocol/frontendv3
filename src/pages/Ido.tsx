@@ -97,7 +97,7 @@ export default function Seed() {
     contractAddress: assetAddress,
     functionName: "approve",
     params: { spender: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148', amount: ethers.utils.parseUnits(number || '0', "ether") },
-    network: 'goerli',
+    
   });
 
 
@@ -189,7 +189,7 @@ export default function Seed() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USD raised</Heading>
             </Center>
             <Center textStyle='data'>
-              {(getTotalDollarContributed.data / 10 ** 18).toFixed(2)} USD
+              {(parseInt(getTotalDollarContributed.data||'0') / 10 ** 18).toFixed(2)} USD
             </Center>
           </Flex>
           <Spacer />
@@ -198,7 +198,7 @@ export default function Seed() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current deposit </Heading>
             </Center>
             <Center textStyle='data'>
-              {(getUserParticipations.data * 10 ** 18).toFixed(2)}  USD
+              {(parseInt(getUserParticipations.data||'0') * 10 ** 18).toFixed(2)}  USD
             </Center>
           </Flex>
           <Spacer />
@@ -206,7 +206,7 @@ export default function Seed() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current token allocation </Heading>
             </Center>
-            <Center textStyle='data'> {(getMySeedTokens.data / 10 ** 18).toFixed(2)} </Center>
+            <Center textStyle='data'> {(parseInt(getMySeedTokens.data||'0') / 10 ** 18).toFixed(2)} </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
@@ -256,7 +256,7 @@ export default function Seed() {
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
                 </Center>
                 <Center position='relative' top='10px' textStyle='dataSmall'>
-                  {(getBalanceOf.data/10**18).toFixed(2)} USDIl
+                  {(parseInt(getBalanceOf.data||'0')/10**18).toFixed(2)} USDIl
                 </Center>
               </Flex>
             </Center>
@@ -315,7 +315,7 @@ export default function Seed() {
                                 _tokenAddress: assetAddress,
                                 _tokenAmount: ethers.utils.parseUnits(number || '0', "ether"),
                               },
-                              network: 'goerli',
+                            
                             }
                           });
                           doApprove.fetch();

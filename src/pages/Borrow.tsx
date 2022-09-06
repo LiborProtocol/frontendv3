@@ -48,7 +48,6 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   AlertDialogCloseButton,
-  leastDestructiveRef,
 
 } from '@chakra-ui/react';
 
@@ -104,7 +103,6 @@ export default function Borrow() {
       contractAddress: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
       functionName: "mintVault",
       params: {},
-      network: 'goerli',
     });
 
   const doApprove = useWeb3ExecuteFunction({
@@ -112,7 +110,6 @@ export default function Borrow() {
     contractAddress: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     functionName: "approve",
     params: { spender: "0x121b7FEe11d04B62330f21fAF763Fd32DB3D9E80", amount: ethers.utils.parseUnits(number1 || '0', "ether") },
-    network: 'goerli',
   });
 
   const doTransfer
@@ -124,7 +121,6 @@ export default function Borrow() {
         recipient: '0x121b7FEe11d04B62330f21fAF763Fd32DB3D9E80',
         amount: ethers.utils.parseUnits(number1 || '0', "ether"),
       },
-      network: 'goerli',
     });
 
   const doBorrow
@@ -136,7 +132,6 @@ export default function Borrow() {
         id: 1,
         amount: ethers.utils.parseUnits(number2||'0', "ether"),
       },
-      network: 'goerli',
     });
 
     const doWithdraw
@@ -148,7 +143,6 @@ export default function Borrow() {
         token_address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
         amount: ethers.utils.parseUnits(number1||'0', "ether"),
       },
-      network: 'goerli',
     });
 
     const doRepay
@@ -160,7 +154,6 @@ export default function Borrow() {
         id: 1,
         amount: ethers.utils.parseUnits(number2||'0', "ether"),
       },
-      network: 'goerli',
     });
 
 

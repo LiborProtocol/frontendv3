@@ -2,7 +2,6 @@ import React from 'react'
 import { Box, Flex, Heading, position } from '@chakra-ui/react'
 import { Center } from '@chakra-ui/react'
 import { useWeb3ExecuteFunction, useTokenPrice } from 'react-moralis';
-import { abiUSDI, abiIERC20 } from '#modules/Abi';
 import abiSeedRound from '#modules/AbiSeedRound';
 import { Button } from '@chakra-ui/react';
 import { useApiContract } from 'react-moralis';
@@ -115,7 +114,7 @@ export default function Seed() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total ETH raised</Heading>
             </Center>
             <Center textStyle='data'>
-            {getTotalWeiContributed.data / 10 ** 18} ETH
+            {parseInt(getTotalWeiContributed.data ||'0') / 10 ** 18} ETH
             
             </Center>
           </Flex>
@@ -125,7 +124,7 @@ export default function Seed() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current deposit </Heading>
             </Center>
             <Center textStyle='data'>
-              {getInvestorBalances.data / 10 ** 18}  ETH
+              {parseInt(getInvestorBalances.data ||'0') / 10 ** 18}  ETH
             </Center>
           </Flex>
           <Spacer />
@@ -133,14 +132,14 @@ export default function Seed() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current token allocation </Heading>
             </Center>
-            <Center textStyle='data'> {getMySeedTokens.data / 10 ** 18} </Center>
+            <Center textStyle='data'> {parseInt(getMySeedTokens.data || '0') / 10 ** 18} </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Current LIBOR token price</Heading></Center>
             <Center textStyle='data'>
-            {parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2))*parseInt(getTotalWeiContributed.data)/10**18/(3*10**9)}$
+            {parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2))*parseInt(getTotalWeiContributed.data || '0')/10**18/(3*10**9)}$
             </Center>
           </Flex>
         </Flex>
@@ -219,8 +218,7 @@ export default function Seed() {
                            contractAddress: '0xa0A56825246b59C1a84b805B1a6acC410fDFcE04',
                            functionName: "reserve",
                            params: {},
-                           network: 'goerli',
-                           msgValue: ethers.utils.parseUnits(number, "ether"),
+                           msgValue: parseInt(number||'0') *10**18,
                          }
                        })}
 
