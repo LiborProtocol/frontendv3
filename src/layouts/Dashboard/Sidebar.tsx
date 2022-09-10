@@ -4,6 +4,7 @@ import { faEarth } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRoutes, useMatch, useLocation, Link } from 'react-router-dom'
 import { A } from '#components/A'
+import { Center } from '@chakra-ui/react';
 
 interface SidebarProps extends BoxProps {
   onClose: () => void
@@ -33,7 +34,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
               {/* <span className="text-4xl">
                 <FontAwesomeIcon icon={faEarth} />
               </span> */}
-              <span className="ml-1">Menu</span>
+              <Center textStyle='dataHeader'>Menu</Center>
             </div>
           </div>
         </li>
@@ -45,11 +46,11 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
               <A
                 url={item.path}
                 className={`
-                relative flex flex-row items-center h-12 focus:outline-none  border-l-4 border-transparent hover:border-indigo-500 pr-6 mx-3 rounded-2xl
+                relative flex flex-row items-center h-12 focus:outline-none  border-transparent pr-6 mx-3 rounded-2xl
                 ${
                   isActive
-                    ? 'bg-white text-pink-500 font-bold  '
-                    : 'hover:bg-white  hover:text-pink-500'
+                    ? 'bg-cyan-600 text-white font-bold'
+                    : 'hover:bg-white  hover:text-cyan-600 font-bold'
                 }
                 `}
               >
@@ -60,7 +61,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
           )
         })}
 
-        <li className="border-t border-pink-300 py-2 mx-2 rounded" />
+        <li className="border-t border-white-300 py-2 mx-2 rounded" />
 
       
       </ul>

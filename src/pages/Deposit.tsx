@@ -175,7 +175,7 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USDI supply </Heading>
             </Center>
             <Center textStyle='data'>
-              {parseInt(getTotalSupply.data || '0') / 10 ** 18}  USDI
+              {(parseInt(getTotalSupply.data || '0') / 10 ** 18).toFixed(2)}  USDI
             </Center>
           </Flex>
           <Spacer />
@@ -183,14 +183,14 @@ export default function Deposit() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
             </Center>
-            <Center textStyle='data'> {parseInt(getUsdcReserve.data || '0' )* 10 ** 12 / parseInt(getTotalSupply.data || '0')} %</Center>
+            <Center textStyle='data'> {(parseInt(getUsdcReserve.data || '0' )* 10 ** 12 / parseInt(getTotalSupply.data || '0')).toFixed(2)} %</Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > USDC in reserve </Heading></Center>
             <Center textStyle='data'>
-              {parseInt(getUsdcReserve.data || '0') / 10 ** 6} USDC
+              {(parseInt(getUsdcReserve.data || '0') / 10 ** 6).toFixed(2)} USDC
             </Center>
           </Flex>
         </Flex>

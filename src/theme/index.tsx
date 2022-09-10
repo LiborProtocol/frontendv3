@@ -5,6 +5,14 @@ import NumberInputField from './components/NumberInputField'
 import textStyles from './styles/TextStyles'
  
 const theme = {
+  
+  styles: { 
+    global: { 
+        html: { 
+            fontSize: "14px"
+        }
+     }
+  },
   textStyles,
   layerStyles,
   components: {

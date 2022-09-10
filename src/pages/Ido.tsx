@@ -206,7 +206,7 @@ export default function Seed() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current token allocation </Heading>
             </Center>
-            <Center textStyle='data'> {(parseInt(getMySeedTokens.data||'0') / 10 ** 18).toFixed(2)} </Center>
+            <Center textStyle='data'> {(parseInt(getMySeedTokens.data||'0') / 10 ** 18).toFixed(0)} </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
