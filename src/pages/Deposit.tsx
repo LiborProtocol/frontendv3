@@ -100,6 +100,10 @@ export default function Deposit() {
     await getUsdiBalance.runContractFunction();
   }
 
+  const fetchApprove = async () => {
+    await getApprove.runContractFunction();
+  }
+
   /* MORALIS API CALLS */
 
   const getInterestRate
@@ -294,8 +298,7 @@ export default function Deposit() {
                           if (isAuthenticated) {
 
                             await (await getApprove.fetch()).wait();
-
-                            await ((await doDeposit.fetch())).wait();
+                            await (await doDeposit.fetch()).wait();
                             fetchActiveTotalSupply();
                             fetchActiveUsdcReserve();
                             fetchActiveUsdcBalance();

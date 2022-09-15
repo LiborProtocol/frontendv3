@@ -75,9 +75,12 @@ export default function Borrow() {
 
   const fetchActiveTokenBalance = async () => {
     await getTokenBalance.runContractFunction();
-
   }
 
+  const fetchActiveVaultLiability = async () => {
+    await getVaultLiability.runContractFunction();
+  }
+  
   const [userAccount, setAccount] = useState('');
   const [userAddress, setAddress] = useState('');
   const [ID, setID] = useState('');
@@ -130,6 +133,21 @@ export default function Borrow() {
     }
   }, [vaultAddress])
 
+  useEffect(
+    () => {
+      if (getTokenBalance.data) {
+        setTokenBalance(parseInt(getTokenBalance.data))
+      }
+    },
+  )
+
+  useEffect(
+    () => {
+      if (ID.length > 0) {
+        fetchActiveVaultLiability();
+      }
+    },[ID]
+  )
   useEffect(
     () => {
       if (getTokenBalance.data) {
@@ -199,7 +217,7 @@ export default function Borrow() {
       address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
       functionName: "vaultBorrowingPower",
       params: {
-        id: 2,
+        id: ID[0],
       },
       chain: 'goerli',
     });
@@ -210,7 +228,7 @@ export default function Borrow() {
       address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
       functionName: "vaultLiability",
       params: {
-        id: 2,
+        id: ID[0],
       },
       chain: 'goerli',
     });
