@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Box, Flex, Heading, position } from '@chakra-ui/react'
 import { Center } from '@chakra-ui/react'
@@ -26,62 +25,49 @@ import { useRef } from 'react';
 import abiUSDI from '#modules/AbiUSDI';
 import abiVaultController from '#modules/AbiVaultController';
 import { useMoralis } from 'react-moralis';
+import { isUndefined } from 'lodash';
 
 export default function Deposit() {
 
-
   const ActionDown = useDisclosure()
   const ActionUp = useDisclosure()
-
   const cancelRef = useRef<HTMLButtonElement>(null);
-
   const [number, setNumber] = useState("");
-
-  const { user } = useMoralis();
-
-  let userAddress = '';
-
-  if (user !== null) {
-    userAddress = user.get("ethAddress");
-  }
-  /*   const doDeposit = useWeb3ExecuteFunction({
-      abi: abiUSDI,
-      contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
-      functionName: "donate",
-      params: {usdc_amount: 1000},
-      network: 'goerli',
-    });
-   */
+  const [userAccount, setAccount] = useState('');
+  const [userAddress, setAddress] = useState('');
+  const [tokenBalance, setTokenBalance] = useState(0);
+  const { isAuthenticated, Moralis, account, user } = useMoralis();
 
 
-  /*   const doDeposit = useWeb3ExecuteFunction({
-      abi: abiUSDI,
-      contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
-      functionName: "donate",
-      params: {usdc_amount: 10},
-      network: 'goerli',
-    }); */
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user) {
+        setAddress(user.attributes.ethAddress);
+      }
+      if (account) {
+        setAccount(account);
+      }
+    }
+  })
+
+  useEffect(() => {
+    if (userAccount) {
+      fetchActiveTotalSupply();
+      fetchActiveUsdcReserve();
+      fetchActiveUsdcBalance();
+      fetchActiveUsdiBalance();
+    }
+  }, [userAccount])
 
 
-  /*   const doDeposit = useWeb3ExecuteFunction({
-      abi: abiUSDI,
-      contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
-      functionName: "mint",
-      params: {usdc_amount: 10000000000},
-      network: 'goerli',
-    }); */
-
-  /*   const doDeposit = useWeb3ExecuteFunction({
-      abi: abiUSDI,
-      contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
-      functionName: "transfer",
-      params: {value: ethers.utils.parseUnits("1000", "ether"), to:'0xD0B3b99383F450654FB312C3c4d094442684674f'},
-      network: 'goerli',
-    }); */
 
 
-  /*  const doWithdraw = useWeb3ExecuteFunction();
- 
+
+
+
+
+
+  /* 
    const increaseAllowance = useWeb3ExecuteFunction({
      abi: abiUSDI,
      contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
@@ -89,8 +75,7 @@ export default function Deposit() {
      params: { addedValue: 1000 * 10 ** 6, spender: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B' },
      network: 'goerli',
    });
- 
- 
+  
    const getAllowance = useWeb3ExecuteFunction({
      abi: abiUSDI,
      contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
@@ -99,34 +84,23 @@ export default function Deposit() {
      network: 'goerli',
    }); */
 
+  const fetchActiveTotalSupply = async () => {
+    await getTotalSupply.runContractFunction();
+  }
 
+  const fetchActiveUsdcReserve = async () => {
+    await getUsdcReserve.runContractFunction();
+  }
 
+  const fetchActiveUsdcBalance = async () => {
+    await getUsdcBalance.runContractFunction();
+  }
 
+  const fetchActiveUsdiBalance = async () => {
+    await getUsdiBalance.runContractFunction();
+  }
 
-  const doWithdraw = useWeb3ExecuteFunction({
-    abi: abiUSDI,
-    contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
-    functionName: "withdraw",
-    params: { usdc_amount: parseInt(number || '0') * 10 ** 6 },
-  
-  });
-
-
-  const doDeposit = useWeb3ExecuteFunction({
-    abi: abiUSDI,
-    contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
-    functionName: "deposit",
-    params: { usdc_amount: parseInt(number || '0') * 10 ** 6},
-   
-  });
-
-  const getApprove = useWeb3ExecuteFunction({
-    abi: abiIERC20,
-    contractAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-    functionName: "approve",
-    params: { spender: "0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918", amount: parseInt(number || '0') * 10 ** 6 },
-  
-  });
+  /* MORALIS API CALLS */
 
   const getInterestRate
     = useApiContract({
@@ -154,21 +128,50 @@ export default function Deposit() {
       params: { account: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918' },
       chain: 'goerli',
     });
-  
-    const userUsdiBalance
+
+  const getUsdcBalance
+    = useApiContract({
+      abi: abiIERC20,
+      address: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      functionName: "balanceOf",
+      params: { account: userAccount },
+      chain: 'goerli',
+    });
+
+  const getUsdiBalance
     = useApiContract({
       abi: abiIERC20,
       address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
       functionName: "balanceOf",
-      params: { account: userAddress },
+      params: { account: userAccount },
       chain: 'goerli',
     });
 
-   
-  useEffect(() => { getInterestRate.runContractFunction(), getTotalSupply.runContractFunction(), getUsdcReserve.runContractFunction(),userUsdiBalance.runContractFunction() }, []);
-  console.log(getInterestRate.data)
-  console.log(userUsdiBalance.data)
 
+  const doWithdraw = useWeb3ExecuteFunction({
+    abi: abiUSDI,
+    contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+    functionName: "withdraw",
+    params: { usdc_amount: parseInt(number || '0') * 10 ** 6 },
+
+  });
+
+  const doDeposit = useWeb3ExecuteFunction({
+    abi: abiUSDI,
+    contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+    functionName: "deposit",
+    params: { usdc_amount: parseInt(number || '0') * 10 ** 6 },
+
+  });
+
+  const getApprove = useWeb3ExecuteFunction({
+    abi: abiIERC20,
+    contractAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+    functionName: "approve",
+    params: { spender: "0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918", amount: parseInt(number || '0') * 10 ** 6 },
+  });
+
+  console.log(userAccount)
   return (
     <div>
       <Center>
@@ -204,7 +207,7 @@ export default function Deposit() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
             </Center>
-            <Center textStyle='data'> {(parseInt(getUsdcReserve.data || '0' )* 10 ** 14 / parseInt(getTotalSupply.data || '0')).toFixed(2)} %</Center>
+            <Center textStyle='data'> {(parseInt(getUsdcReserve.data || '0') * 10 ** 14 / parseInt(getTotalSupply.data || '0')).toFixed(2)} %</Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
@@ -215,7 +218,7 @@ export default function Deposit() {
             </Center>
           </Flex>
         </Flex>
-      </Center> 
+      </Center>
 
       <Center>
         <Flex layerStyle='background' justifyContent='center' top='110px'>
@@ -223,16 +226,16 @@ export default function Deposit() {
             <Center>
               <Flex layerStyle='secondary'>
                 <Center position='relative' top='-6px'>
-                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your deposited amount </Heading>
+                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your USDC Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='-6px'>
-                  <Text textStyle='data'> 120,350 $</Text>
+                  <Text textStyle='data'> {(parseInt(getUsdcBalance.data || '0') / 10 ** 6).toFixed(2)} USDC </Text>
                 </Center>
                 <Center position='relative' top='10px'>
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>
+                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your USDL Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='10px'>
-                  <Text textStyle='dataSmall' > {(parseInt(userUsdiBalance.data || '0') / 10 ** 18).toFixed(2)} USDl</Text>
+                  <Text textStyle='dataSmall' > {(parseInt(getUsdiBalance.data || '0') / 10 ** 18).toFixed(2)} USDL</Text>
                 </Center>
               </Flex>
             </Center>
@@ -286,10 +289,26 @@ export default function Deposit() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={() => {
-                          doDeposit.fetch();
-                          getApprove.fetch();
-                        }}>
+                        <Button bgColor='green.500' w='12' onClick={async () => {
+
+                          if (isAuthenticated) {
+
+                            await (await getApprove.fetch()).wait();
+
+                            await ((await doDeposit.fetch())).wait();
+                            fetchActiveTotalSupply();
+                            fetchActiveUsdcReserve();
+                            fetchActiveUsdcBalance();
+                            fetchActiveUsdiBalance();
+
+                            /* if (getTokenBalance.data) {
+                              setTokenBalance(parseInt(getTokenBalance.data))
+                            } */
+                            ActionUp.onClose();
+                          }
+
+                        }
+                        }>
                           Yes
                         </Button>
                       </Flex>
@@ -317,7 +336,19 @@ export default function Deposit() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={() => doWithdraw.fetch()} > {/*  onClick={() => doDeposit.fetch()  */}
+                        <Button bgColor='green.500' w='12' onClick={async () => {
+
+                          if (isAuthenticated) {
+                            await ((await doWithdraw.fetch())).wait();
+                            fetchActiveTotalSupply();
+                            fetchActiveUsdcReserve();
+                            fetchActiveUsdcBalance();
+                            fetchActiveUsdiBalance();
+                            ActionDown.onClose();
+                          }
+
+                        }
+                        } >
                           Yes
                         </Button>
                       </Flex>

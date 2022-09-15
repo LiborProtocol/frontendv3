@@ -85,18 +85,6 @@ export default function Borrow() {
   const [tokenBalance, setTokenBalance] = useState(0);
   const { isAuthenticated, Moralis, account, user } = useMoralis();
 
-
-  const getTokenBalance
-    = useApiContract({
-      abi: abiVault,
-      address: vaultAddress,
-      functionName: "tokenBalance",
-      params: {
-        addr: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
-      },
-      chain: 'goerli',
-    });
-
   useEffect(() => {
     if (isAuthenticated) {
       if (user) {
@@ -171,6 +159,17 @@ export default function Borrow() {
       functionName: "vaultAddress",
       params: {
         id: ID[0],
+      },
+      chain: 'goerli',
+    });
+
+  const getTokenBalance
+    = useApiContract({
+      abi: abiVault,
+      address: vaultAddress,
+      functionName: "tokenBalance",
+      params: {
+        addr: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
       },
       chain: 'goerli',
     });
@@ -308,7 +307,7 @@ export default function Borrow() {
             </Tr>
             <Tr>
               <Td>Wrapped Ethereum</Td>
-              <Td>{(tokenBalance/10**18).toFixed(4)} WETH</Td>
+              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WETH</Td>
               <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
             </Tr>
