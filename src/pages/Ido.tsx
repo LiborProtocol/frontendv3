@@ -44,7 +44,7 @@ import abiSeedRound from '#modules/AbiSeedRound';
 import abiSeedRound2 from '#modules/AbiSeedRound2';
 
 import { Button } from '@chakra-ui/react';
-import { useApiContract } from 'react-moralis';
+import { useApiContract, useMoralis } from 'react-moralis';
 import { useEffect } from 'react';
 import { NumberInput, InputGroup, InputRightElement, NumberInputField } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -72,24 +72,37 @@ import {
   MenuOptionGroup,
   MenuDivider,
 } from '@chakra-ui/react';
+import { ConnectButton } from '@web3uikit/web3';
 
 
 
 export default function Seed() {
 
-
   const ActionUp = useDisclosure()
-
   const cancelRef = useRef<HTMLButtonElement>(null);
 
+  const userAccount = useMoralis().account;
   const [number, setNumber] = useState("");
 
-  const [assetDeposit, setAssetDeposit] = useState("BNB");
-  const [assetAddress, setAssetAddress] = useState("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984");
+  const [assetDeposit, setAssetDeposit] = useState("WETH");
+  const [assetAddress, setAssetAddress] = useState("0x326C977E6efc84E512bB9C30f76E30c160eD06FB");
 
 
 
-  useEffect(() => {getBalanceOf.runContractFunction(), getUserParticipations.runContractFunction(), getMySeedTokens.runContractFunction(), getTotalDollarContributed.runContractFunction(), getEthPrice.fetchTokenPrice() }, []);
+  useEffect(() => {
+
+    setTimeout(() => {
+
+      getBalanceOf.runContractFunction();
+      getUserParticipations.runContractFunction();
+      getMySeedTokens.runContractFunction();
+      getTotalDollarContributed.runContractFunction();
+      getEthPrice.fetchTokenPrice();
+    }
+
+      , 2000)
+  }
+    , []);
 
 
   const doApprove = useWeb3ExecuteFunction({
@@ -97,7 +110,6 @@ export default function Seed() {
     contractAddress: assetAddress,
     functionName: "approve",
     params: { spender: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148', amount: ethers.utils.parseUnits(number || '0', "ether") },
-    
   });
 
 
@@ -107,7 +119,7 @@ export default function Seed() {
       address: assetAddress,
       functionName: "balanceOf",
       params: {
-        account: '0x2718BD3048ec067E6d678b580D887bE80D0fcE0a',
+        account: userAccount || '0x0',
       },
       chain: 'goerli',
     });
@@ -118,7 +130,7 @@ export default function Seed() {
       address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
       functionName: "getUserParticipations1",
       params: {
-        _sender: '0x2718BD3048ec067E6d678b580D887bE80D0fcE0a',
+        _sender: userAccount || '0x0',
       },
       chain: 'goerli',
     });
@@ -129,7 +141,7 @@ export default function Seed() {
       address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
       functionName: "getMySeedTokens",
       params: {
-        _sender: '0x2718BD3048ec067E6d678b580D887bE80D0fcE0a',
+        _sender: userAccount || '0x0',
       },
       chain: 'goerli',
     });
@@ -169,7 +181,12 @@ export default function Seed() {
   const doDeposit = useWeb3ExecuteFunction()
 
 
+  console.log(getTotalDollarContributed.data)
   console.log(getUserParticipations.data)
+  console.log(getMySeedTokens.data)
+  console.log(getEthPrice.data?.usdPrice)
+  console.log(userAccount)
+
 
   return (
     <div>
@@ -189,7 +206,7 @@ export default function Seed() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USD raised</Heading>
             </Center>
             <Center textStyle='data'>
-              {(parseInt(getTotalDollarContributed.data||'0') / 10 ** 18).toFixed(2)} USD
+              {(parseInt(getTotalDollarContributed.data || '0') / 10 ** 18).toFixed(2)} USD
             </Center>
           </Flex>
           <Spacer />
@@ -198,7 +215,7 @@ export default function Seed() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current deposit </Heading>
             </Center>
             <Center textStyle='data'>
-              {(parseInt(getUserParticipations.data||'0') * 10 ** 18).toFixed(2)}  USD
+              {(parseInt(getUserParticipations.data || '0') * 10 ** 18).toFixed(2)}  USD
             </Center>
           </Flex>
           <Spacer />
@@ -206,7 +223,7 @@ export default function Seed() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current token allocation </Heading>
             </Center>
-            <Center textStyle='data'> {(parseInt(getMySeedTokens.data||'0') / 10 ** 18).toFixed(0)} </Center>
+            <Center textStyle='data'> {(parseInt(getMySeedTokens.data || '0') / 10 ** 18).toFixed(0)} </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
@@ -236,7 +253,7 @@ export default function Seed() {
                     <MenuList bg='#EEEEEE'>
                       <MenuItem onClick={() => {
                         setAssetDeposit('BNB');
-                        setAssetAddress('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984');
+                        setAssetAddress('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'); //
                       }
                       }  >BNB</MenuItem>
                       <MenuItem onClick={() => {
@@ -256,7 +273,8 @@ export default function Seed() {
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
                 </Center>
                 <Center position='relative' top='10px' textStyle='dataSmall'>
-                  {(parseInt(getBalanceOf.data||'0')/10**18).toFixed(2)} USDIl
+                  {(parseInt(getBalanceOf.data || '0') / 10 ** 18).toFixed(2)}
+                  {userAccount} USDIl
                 </Center>
               </Flex>
             </Center>
@@ -315,7 +333,7 @@ export default function Seed() {
                                 _tokenAddress: assetAddress,
                                 _tokenAmount: ethers.utils.parseUnits(number || '0', "ether"),
                               },
-                            
+
                             }
                           });
                           doApprove.fetch();

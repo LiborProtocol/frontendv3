@@ -25,6 +25,7 @@ import { useDisclosure } from '@chakra-ui/react';
 import { useRef } from 'react';
 import abiUSDI from '#modules/AbiUSDI';
 import abiVaultController from '#modules/AbiVaultController';
+import { useMoralis } from 'react-moralis';
 
 export default function Deposit() {
 
@@ -36,6 +37,13 @@ export default function Deposit() {
 
   const [number, setNumber] = useState("");
 
+  const { user } = useMoralis();
+
+  let userAddress = '';
+
+  if (user !== null) {
+    userAddress = user.get("ethAddress");
+  }
   /*   const doDeposit = useWeb3ExecuteFunction({
       abi: abiUSDI,
       contractAddress: '0xFaA33853efA462a3A266e6D829a4D9660cEB904B',
@@ -92,6 +100,9 @@ export default function Deposit() {
    }); */
 
 
+
+
+
   const doWithdraw = useWeb3ExecuteFunction({
     abi: abiUSDI,
     contractAddress: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
@@ -143,11 +154,21 @@ export default function Deposit() {
       params: { account: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918' },
       chain: 'goerli',
     });
+  
+    const userUsdiBalance
+    = useApiContract({
+      abi: abiIERC20,
+      address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+      functionName: "balanceOf",
+      params: { account: userAddress },
+      chain: 'goerli',
+    });
 
    
-  useEffect(() => { getInterestRate.runContractFunction, getTotalSupply.runContractFunction(), getUsdcReserve.runContractFunction() }, []);
+  useEffect(() => { getInterestRate.runContractFunction(), getTotalSupply.runContractFunction(), getUsdcReserve.runContractFunction(),userUsdiBalance.runContractFunction() }, []);
   console.log(getInterestRate.data)
- 
+  console.log(userUsdiBalance.data)
+
   return (
     <div>
       <Center>
@@ -183,7 +204,7 @@ export default function Deposit() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
             </Center>
-            <Center textStyle='data'> {(parseInt(getUsdcReserve.data || '0' )* 10 ** 12 / parseInt(getTotalSupply.data || '0')).toFixed(2)} %</Center>
+            <Center textStyle='data'> {(parseInt(getUsdcReserve.data || '0' )* 10 ** 14 / parseInt(getTotalSupply.data || '0')).toFixed(2)} %</Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
@@ -194,7 +215,7 @@ export default function Deposit() {
             </Center>
           </Flex>
         </Flex>
-      </Center>
+      </Center> 
 
       <Center>
         <Flex layerStyle='background' justifyContent='center' top='110px'>
@@ -211,7 +232,7 @@ export default function Deposit() {
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='10px'>
-                  <Text textStyle='dataSmall' > 1,450 USDl</Text>
+                  <Text textStyle='dataSmall' > {(parseInt(userUsdiBalance.data || '0') / 10 ** 18).toFixed(2)} USDl</Text>
                 </Center>
               </Flex>
             </Center>

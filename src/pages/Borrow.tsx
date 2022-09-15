@@ -1,14 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { MoralisProvider } from "react-moralis";
 import { useMoralis } from "react-moralis";
-import { Title } from '#components/Title'
 import { useApiContract } from 'react-moralis';
-import { useCounter } from "@chakra-ui/counter"
-import { useWeb3ExecuteFunction } from 'react-moralis';
+import { useWeb3ExecuteFunction, useTokenPrice } from 'react-moralis';
 import { Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
-import { abiOracle } from '#modules/Abi';
-import { abiRelay } from '#modules/Abi';
 import abiIERC20 from '#modules/AbiIERC20';
 import abiVault from '#modules/AbiVault';
 import abiVaultController from '#modules/AbiVaultController';
@@ -51,51 +46,181 @@ import {
 
 } from '@chakra-ui/react';
 
+import { useMoralisQuery } from 'react-moralis';
 import { useDisclosure } from '@chakra-ui/react';
-import button from '#components/Button';
+import { stringify } from 'querystring';
+import Moralis from 'moralis/types';
 
 
 export default function Borrow() {
 
-
   const boxColorPrimary = '#393E46'
   const boxColorSecondary = '#00ADB5'
-
-
   const ActionDown1 = useDisclosure()
   const ActionUp1 = useDisclosure()
   const ActionDown2 = useDisclosure()
   const ActionUp2 = useDisclosure()
-
   const [number1, setNumber1] = useState("");
   const [number2, setNumber2] = useState("");
-
   const cancelRef = useRef<HTMLButtonElement>(null);
-
   const [assetDeposit, setAssetDeposit] = useState("BNB");
 
-  useEffect(() => { }, [])
+  const fetchActiveVaultID = async () => {
+    await getVaultID.runContractFunction();
+  }
 
-  /*   const getVaultsMinted
-      = useApiContract({
-        abi: abiOracle,
-        address: '0x60Dd1c948933333C7765DB945514e68Cbe103596',
-        functionName: "currentValue",
-        params: {},
-        chain: 'goerli',
-      }); */
+  const fetchActiveVaultAddress = async () => {
+    await getVaultAddress.runContractFunction();
+  }
 
-  /*   const GetPrice
-    = useWeb3ExecuteFunction({
-      abi: abiOracle,
-      contractAddress: '0x3594c87266E5A2DAA2697EfaD4263E5b8889E233',
-      functionName: "getLivePrice",
+  const fetchActiveTokenBalance = async () => {
+    await getTokenBalance.runContractFunction();
+
+  }
+
+  const [userAccount, setAccount] = useState('');
+  const [userAddress, setAddress] = useState('');
+  const [ID, setID] = useState('');
+  const [vaultAddress, setVaultAddress] = useState('');
+  const [tokenBalance, setTokenBalance] = useState(0);
+  const { isAuthenticated, Moralis, account, user } = useMoralis();
+
+
+  const getTokenBalance
+    = useApiContract({
+      abi: abiVault,
+      address: vaultAddress,
+      functionName: "tokenBalance",
       params: {
-        token_address: '0x326C977E6efc84E512bB9C30f76E30c160eD06FB'
+        addr: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
       },
-      network: 'goerli',
+      chain: 'goerli',
     });
- */
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user) {
+        setAddress(user.attributes.ethAddress);
+      }
+      if (account) {
+        setAccount(account);
+      }
+    }
+  })
+
+  useEffect(() => {
+    if (userAccount) {
+      fetchActiveVaultID();
+    }
+  }, [userAccount])
+
+  useEffect(
+    () => {
+      if (getVaultID.data) {
+        setID(getVaultID.data)
+      }
+    },
+  )
+
+  useEffect(() => {
+    if (ID.length > 0) {
+      fetchActiveVaultAddress();
+    }
+  }, [ID])
+
+  useEffect(
+    () => {
+      if (getVaultAddress.data) {
+        setVaultAddress(getVaultAddress.data)
+      }
+    },
+  )
+
+  useEffect(() => {
+    if (vaultAddress.length > 0) {//Not the best way to guarantee vaultAddress is not empty
+      fetchActiveTokenBalance();
+    }
+  }, [vaultAddress])
+
+  useEffect(
+    () => {
+      if (getTokenBalance.data) {
+        setTokenBalance(parseInt(getTokenBalance.data))
+      }
+    },
+  )
+
+
+  /* MORALIS API CALLS */
+
+  const getVaultID
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      functionName: "vaultIDs",
+      params: {
+        wallet: userAccount,
+      },
+      chain: 'goerli',
+    });
+
+  const getVaultAddress
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      functionName: "vaultAddress",
+      params: {
+        id: ID[0],
+      },
+      chain: 'goerli',
+    });
+
+
+  console.log('START')
+  console.log(userAccount)
+  console.log(ID)
+  console.log(getVaultID.data)
+  console.log(getVaultAddress.data)
+  console.log(vaultAddress)
+  console.log(tokenBalance)
+  console.log('END')
+
+  const getVaultsMinted
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      functionName: "vaultsMinted",
+      params: {},
+      chain: 'goerli',
+    });
+
+  const getVaultBorrowingPower
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      functionName: "vaultBorrowingPower",
+      params: {
+        id: 2,
+      },
+      chain: 'goerli',
+    });
+
+  const getVaultLiability
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      functionName: "vaultLiability",
+      params: {
+        id: 2,
+      },
+      chain: 'goerli',
+    });
+
+  /* PRICE API CALLS */
+
+  const getEthPrice = useTokenPrice({ address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", chain: "eth" });
+
+  /* WEB3 TRANSACTIONS */
 
   const mintVault
     = useWeb3ExecuteFunction({
@@ -105,20 +230,13 @@ export default function Borrow() {
       params: {},
     });
 
-  const doApprove = useWeb3ExecuteFunction({
-    abi: abiIERC20,
-    contractAddress: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-    functionName: "approve",
-    params: { spender: "0x121b7FEe11d04B62330f21fAF763Fd32DB3D9E80", amount: ethers.utils.parseUnits(number1 || '0', "ether") },
-  });
-
   const doTransfer
     = useWeb3ExecuteFunction({
       abi: abiIERC20,
       contractAddress: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
       functionName: "transfer",
       params: {
-        recipient: '0x121b7FEe11d04B62330f21fAF763Fd32DB3D9E80',
+        recipient: vaultAddress,
         amount: ethers.utils.parseUnits(number1 || '0', "ether"),
       },
     });
@@ -129,33 +247,32 @@ export default function Borrow() {
       contractAddress: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
       functionName: "borrowUsdi",
       params: {
-        id: 1,
-        amount: ethers.utils.parseUnits(number2||'0', "ether"),
+        id: ID[0],
+        amount: ethers.utils.parseUnits(number2 || '0', "ether"),
       },
     });
 
-    const doWithdraw
+  const doWithdraw
     = useWeb3ExecuteFunction({
       abi: abiVault,
-      contractAddress: '0x121b7FEe11d04B62330f21fAF763Fd32DB3D9E80',
+      contractAddress: vaultAddress,
       functionName: "withdrawErc20",
       params: {
         token_address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-        amount: ethers.utils.parseUnits(number1||'0', "ether"),
+        amount: ethers.utils.parseUnits(number1 || '0', "ether"),
       },
     });
 
-    const doRepay
+  const doRepay
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
       contractAddress: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
       functionName: "repayUSDi",
       params: {
-        id: 1,
-        amount: ethers.utils.parseUnits(number2||'0', "ether"),
+        id: ID[0],
+        amount: ethers.utils.parseUnits(number2 || '0', "ether"),
       },
     });
-
 
 
 
@@ -185,20 +302,20 @@ export default function Borrow() {
           <Tbody>
             <Tr>
               <Td>Binance Coin</Td>
-              <Td> XXX BNB</Td>
-              <Td>1500$</Td>
+              <Td>SOON !</Td>
+              <Td>SOON !</Td>
               <Td>85%</Td>
             </Tr>
             <Tr>
               <Td>Wrapped Ethereum</Td>
-              <Td>XXX WETH</Td>
-              <Td>1500$</Td>
+              <Td>{(tokenBalance/10**18).toFixed(4)} WETH</Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
             </Tr>
             <Tr>
               <Td>Wrapped Bitcoin</Td>
-              <Td>XXX BTC</Td>
-              <Td>1500$</Td>
+              <Td>SOON !</Td>
+              <Td>SOON !</Td>
               <Td>90%</Td>
             </Tr>
           </Tbody>
@@ -234,21 +351,30 @@ export default function Borrow() {
                 <Center position='relative' top='-6px'>
                   <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Select your asset</Heading>
                 </Center>
-                <Menu >
 
-                  <MenuButton as={Button} rightIcon={<ChevronDownIcon />} color='black' pos='relative' top='0px' bg='#EEEEEE'>
-                    {assetDeposit}
-                  </MenuButton>
+                <Center>
+                  <Menu>
+
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} color='black' pos='relative' top='0px' bg='#EEEEEE' fontSize='lg' fontFamily='Merienda One' w='100%' >
+                      {assetDeposit}
+                    </MenuButton>
 
 
-                  <Center>
-                    <MenuList bg='#EEEEEE'>
-                      <MenuItem onClick={assetDeposit => setAssetDeposit('BNB')}  >BNB</MenuItem>
-                      <MenuItem onClick={assetDeposit => setAssetDeposit('WETH')} >WETH</MenuItem>
-                      <MenuItem onClick={assetDeposit => setAssetDeposit('WBTC')} >WBTC</MenuItem>
-                    </MenuList>
-                  </Center>
-                </Menu>
+                    <Center>
+                      <MenuList bg='#EEEEEE' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Merienda One' borderRadius='20' >
+
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('BNB')} borderRadius='20' >BNB</MenuItem>
+                        <MenuDivider />
+
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')} >WETH</MenuItem>
+                        <MenuDivider />
+
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')} borderRadius='20'>WBTC</MenuItem>
+
+                      </MenuList>
+                    </Center>
+                  </Menu>
+                </Center>
                 <Center position='relative' top='10px' >
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
                 </Center>
@@ -305,10 +431,34 @@ export default function Borrow() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={() => {
-                          doApprove.fetch();
-                          doTransfer.fetch();
-                          }} >
+                        <Button bgColor='green.500' w='12' onClick={async () => {
+
+
+                          if ((isAuthenticated) && (ID.length == 0)) {
+                            await (await mintVault.fetch()).wait();
+                            fetchActiveVaultID();
+                            /* if (getVaultID.data) {
+                              setID(getVaultID.data);
+                            } */
+                            await (await doTransfer.fetch()).wait();
+                            fetchActiveTokenBalance();
+                            /* if (getTokenBalance.data) {
+                              setTokenBalance(parseInt(getTokenBalance.data))
+                            } */
+                            ActionUp1.onClose();
+                          }
+
+                          else if (isAuthenticated && (ID.length > 0)) {
+                            await (await doTransfer.fetch()).wait();
+                            fetchActiveTokenBalance();
+                            /*
+                           if (getTokenBalance.data) {
+                             setTokenBalance(parseInt(getTokenBalance.data))
+                           } */
+                            ActionUp1.onClose();
+                          }
+
+                        }} >
                           Yes
                         </Button>
                       </Flex>
@@ -338,7 +488,20 @@ export default function Borrow() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={ () => doWithdraw.fetch()} >
+                        <Button bgColor='green.500' w='12' onClick={async () => {
+
+                          if (isAuthenticated && (ID.length > 0)) {
+                            await (await doWithdraw.fetch()).wait();
+                            fetchActiveTokenBalance();
+                            /* if (getTokenBalance.data) {
+                              setTokenBalance(parseInt(getTokenBalance.data))
+                            } */
+                            ActionDown1.onClose();
+                          }
+
+                        }
+
+                        } >
                           Yes
                         </Button>
                       </Flex>
@@ -348,11 +511,6 @@ export default function Borrow() {
               </Flex>
             </Center>
           </Flex>
-
-
-
-
-
           <Spacer />
           <Flex
             borderWidth='2px'
@@ -481,7 +639,19 @@ export default function Borrow() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={() => doBorrow.fetch()} >
+                        <Button bgColor='green.500' w='12' onClick={async () => {
+
+                          if (isAuthenticated && (ID.length > 0)) {
+                            await (await doBorrow.fetch()).wait();
+                            fetchActiveTokenBalance();
+                            /* if (getTokenBalance.data) {
+                              setTokenBalance(parseInt(getTokenBalance.data))
+                            } */
+                            ActionUp2.onClose();
+                          }
+
+                        }
+                        }>
                           Yes
                         </Button>
                       </Flex>
@@ -510,7 +680,19 @@ export default function Borrow() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={() => doRepay.fetch()} >
+                        <Button bgColor='green.500' w='12' onClick={async () => {
+
+                          if (isAuthenticated && (ID.length > 0)) {
+                            await (await doRepay.fetch()).wait();
+                            fetchActiveTokenBalance();
+                            /* if (getTokenBalance.data) {
+                              setTokenBalance(parseInt(getTokenBalance.data))
+                            } */
+                            ActionDown2.onClose();
+                          }
+
+                        }
+                        } >
                           Yes
                         </Button>
                       </Flex>
@@ -539,3 +721,17 @@ Curve: '0x1244D0A848DCad94A5e7e6270aa5aA950E8c9Dc6',
 ThreeLines: '0xB112408755314782a4519988284E646aF18641da',
 Oracle: '0xDD65D6FDD4A7ba6f4c9d70544032689bF618A2b3',
 WethOracle: '0x08B8b8dE291B5A88D18b4F754e29A1a8719bDfd4', */
+
+
+/* 12/09/2022
+USDC_WETH_CL: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
+USDC_WETH_POOL: '0x6337b3caf9c5236c7f3d1694410776119edaf9fa',
+USDC: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+WETH: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+ProxyAdmin: '0x145A8d7C814d314874FE3B5E948EcF74DAA71aa0',
+VaultController: '0x943Bba10Ca78FbB5a358E5d3af7EAa9e98FDba2f',
+USDI: '0x593a7F6b29a8B16B86bD4dE8CcE262B6b4840E9d',
+Curve: '0xa1AaB8d3f7f13DA7FCFE34c137cC572b42a56732',
+ThreeLines: '0xf646358345Dd893105702aC4a7d4d31904A420a6',
+Oracle: '0x53d4089c31826D0c56eFF18dF818dCCe5075B7C7',
+WethOracle: '0x9DA6F96B2C677de973FeAe107d77Eb34f99d18D0' */

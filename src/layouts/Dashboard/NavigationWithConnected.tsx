@@ -63,8 +63,11 @@ export const NavigationWithConnected = ({ onOpen, ...rest }: NavigationWithConne
 {/*        <Image  boxSize='85px' src={logo} pos='relative' top='8px'/>
  */}      <Heading size='3xl' color='#00EAFF' fontFamily='Oleo Script' pos='fixed' left='50%'> <Text> Libor Protocol </Text></Heading>
       <Box className="px-2" color='#393E46'>
-      <ConnectButton />
 
+      {/* Code inside my navBar... */}  
+      <ConnectButton />
+      {/* Code inside my navBar... */}  
+          
       </Box>
 
       <Box className="px-2">
