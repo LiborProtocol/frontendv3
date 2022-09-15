@@ -80,12 +80,18 @@ export default function Borrow() {
   const fetchActiveVaultLiability = async () => {
     await getVaultLiability.runContractFunction();
   }
+
+  const fetchActiveVaultBorrowingPower = async () => {
+    await getVaultBorrowingPower.runContractFunction();
+  }
   
   const [userAccount, setAccount] = useState('');
   const [userAddress, setAddress] = useState('');
   const [ID, setID] = useState('');
   const [vaultAddress, setVaultAddress] = useState('');
   const [tokenBalance, setTokenBalance] = useState(0);
+  const [vaultLiability, setVaultLiability] = useState(0);
+  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0);
   const { isAuthenticated, Moralis, account, user } = useMoralis();
 
   useEffect(() => {
@@ -148,14 +154,30 @@ export default function Borrow() {
       }
     },[ID]
   )
+
   useEffect(
     () => {
-      if (getTokenBalance.data) {
-        setTokenBalance(parseInt(getTokenBalance.data))
+      if (getVaultLiability.data) {
+        setVaultLiability(parseInt(getVaultLiability.data))
       }
     },
   )
+  
+  useEffect(
+    () => {
+      if (ID.length > 0) {
+        fetchActiveVaultBorrowingPower();
+      }
+    },[ID]
+  )
 
+  useEffect(
+    () => {
+      if (getVaultBorrowingPower.data) {
+        setVaultBorrowingPower(parseInt(getVaultBorrowingPower.data))
+      }
+    },
+  )
 
   /* MORALIS API CALLS */
 
@@ -200,6 +222,8 @@ export default function Borrow() {
   console.log(getVaultAddress.data)
   console.log(vaultAddress)
   console.log(tokenBalance)
+  console.log(vaultLiability)
+  console.log(vaultBorrowingPower)
   console.log('END')
 
   const getVaultsMinted
@@ -321,7 +345,7 @@ export default function Borrow() {
               <Td>Binance Coin</Td>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
-              <Td>85%</Td>
+              <Td>SOON !</Td>
             </Tr>
             <Tr>
               <Td>Wrapped Ethereum</Td>
@@ -333,7 +357,7 @@ export default function Borrow() {
               <Td>Wrapped Bitcoin</Td>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
-              <Td>90%</Td>
+              <Td>SOON !</Td>
             </Tr>
           </Tbody>
           <Thead>
@@ -347,9 +371,9 @@ export default function Borrow() {
           <Tbody>
             <Tr>
               <Td>Libor Protocol Stablecoin USDl</Td>
-              <Td> XXX USDl</Td>
-              <Td>1500$</Td>
-              <Td>85%</Td>
+              <Td> {vaultLiability/10**18} USDL</Td>
+              <Td>{vaultLiability/10**18} $</Td>
+              <Td>{vaultBorrowingPower/10**18}%</Td>
             </Tr>
           </Tbody>
         </Table>
@@ -660,7 +684,7 @@ export default function Borrow() {
 
                           if (isAuthenticated && (ID.length > 0)) {
                             await (await doBorrow.fetch()).wait();
-                            fetchActiveTokenBalance();
+                            fetchActiveVaultLiability();
                             /* if (getTokenBalance.data) {
                               setTokenBalance(parseInt(getTokenBalance.data))
                             } */
@@ -701,7 +725,7 @@ export default function Borrow() {
 
                           if (isAuthenticated && (ID.length > 0)) {
                             await (await doRepay.fetch()).wait();
-                            fetchActiveTokenBalance();
+                            fetchActiveVaultLiability();
                             /* if (getTokenBalance.data) {
                               setTokenBalance(parseInt(getTokenBalance.data))
                             } */
