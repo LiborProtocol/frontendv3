@@ -412,7 +412,7 @@ export default function Borrow() {
               <Td>SOON !</Td>
             </Tr>
             <Tr>
-              <Td>Wrapped Ethereum</Td>
+              <Td>Wrapped Ethereum WETH</Td>
               <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WETH</Td>
               <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
@@ -434,15 +434,15 @@ export default function Borrow() {
           </Thead>
           <Tbody>
             <Tr>
-              <Td>Libor Protocol Stablecoin USDl</Td>
+              <Td>Libor Protocol Stablecoin USDL</Td>
               <Td> {vaultLiability / 10 ** 18} USDL</Td>
               <Td>{vaultLiability / 10 ** 18} $</Td>
-              <Td>{vaultBorrowingPower / 10 ** 18}%</Td>
+              <Td>{(vaultLiability/vaultBorrowingPower*100).toFixed(2)}%</Td>
             </Tr>
           </Tbody>
         </Table>
-        <Progress isAnimated hasStripe value={64} height='15px' colorScheme='green' bg='red.400' borderRadius='10' top='7px' >
-          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >60%</ProgressLabel>
+        <Progress isAnimated hasStripe value={vaultLiability/vaultBorrowingPower*100} height='15px' colorScheme='green' bg='red.400' borderRadius='10' top='7px' >
+          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability/vaultBorrowingPower*100).toFixed(2)}%</ProgressLabel>
         </Progress>
       </TableContainer>
 
@@ -484,7 +484,7 @@ export default function Borrow() {
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
                 </Center>
                 <Center position='relative' top='10px' textStyle='dataSmall'>
-                  1,450 USDIl
+                {(userTokenBalance/10**18).toFixed(5)} {assetDeposit}
                 </Center>
               </Flex>
             </Center>
