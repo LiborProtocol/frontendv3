@@ -595,7 +595,7 @@ export default function Borrow() {
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='10px'>
-                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > 1,450 USDl</Text>
+                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > {vaultLiability} USDl </Text>
                 </Center>
 
                 {/*   <Center position='relative' top='-2px'>
