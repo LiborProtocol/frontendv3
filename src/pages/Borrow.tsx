@@ -84,7 +84,15 @@ export default function Borrow() {
   const fetchActiveVaultBorrowingPower = async () => {
     await getVaultBorrowingPower.runContractFunction();
   }
-  
+
+  const fetchActiveUserTokenBalance = async () => {
+    await getUserTokenBalance.runContractFunction();
+  }
+
+  const fetchActiveUserUsdiBalance = async () => {
+    await getUserUsdiBalance.runContractFunction();
+  }
+
   const [userAccount, setAccount] = useState('');
   const [userAddress, setAddress] = useState('');
   const [ID, setID] = useState('');
@@ -92,6 +100,8 @@ export default function Borrow() {
   const [tokenBalance, setTokenBalance] = useState(0);
   const [vaultLiability, setVaultLiability] = useState(0);
   const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0);
+  const [userUsdiBalance, setUserUsdiBalance] = useState(0);
+  const [userTokenBalance, setUserTokenBalance] = useState(0);
   const { isAuthenticated, Moralis, account, user } = useMoralis();
 
   useEffect(() => {
@@ -152,7 +162,7 @@ export default function Borrow() {
       if (ID.length > 0) {
         fetchActiveVaultLiability();
       }
-    },[ID]
+    }, [ID]
   )
 
   useEffect(
@@ -162,19 +172,51 @@ export default function Borrow() {
       }
     },
   )
-  
+
   useEffect(
     () => {
       if (ID.length > 0) {
         fetchActiveVaultBorrowingPower();
       }
-    },[ID]
+    }, [ID]
   )
 
   useEffect(
     () => {
       if (getVaultBorrowingPower.data) {
         setVaultBorrowingPower(parseInt(getVaultBorrowingPower.data))
+      }
+    },
+  )
+
+  useEffect(
+    () => {
+      if (ID.length > 0) {
+        fetchActiveUserTokenBalance();
+      }
+    }, [ID]
+  )
+
+  useEffect(
+    () => {
+      if (getUserTokenBalance.data) {
+        setUserTokenBalance(parseInt(getUserTokenBalance.data))
+      }
+    },
+  )
+
+  useEffect(
+    () => {
+      if (ID.length > 0) {
+        fetchActiveUserUsdiBalance();
+      }
+    }, [ID]
+  )
+
+  useEffect(
+    () => {
+      if (getUserUsdiBalance.data) {
+        setUserUsdiBalance(parseInt(getUserUsdiBalance.data))
       }
     },
   )
@@ -253,6 +295,28 @@ export default function Borrow() {
       functionName: "vaultLiability",
       params: {
         id: ID[0],
+      },
+      chain: 'goerli',
+    });
+
+  const getUserTokenBalance
+    = useApiContract({
+      abi: abiIERC20,
+      address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+      functionName: "balanceOf",
+      params: {
+        account: userAccount,
+      },
+      chain: 'goerli',
+    });
+
+  const getUserUsdiBalance
+    = useApiContract({
+      abi: abiIERC20,
+      address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+      functionName: "balanceOf",
+      params: {
+        account: userAccount,
       },
       chain: 'goerli',
     });
@@ -342,7 +406,7 @@ export default function Borrow() {
           </Thead>
           <Tbody>
             <Tr>
-              <Td>Binance Coin</Td>
+              <Td>SOON !</Td>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
@@ -354,7 +418,7 @@ export default function Borrow() {
               <Td>85%</Td>
             </Tr>
             <Tr>
-              <Td>Wrapped Bitcoin</Td>
+              <Td>SOON !</Td>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
@@ -371,9 +435,9 @@ export default function Borrow() {
           <Tbody>
             <Tr>
               <Td>Libor Protocol Stablecoin USDl</Td>
-              <Td> {vaultLiability/10**18} USDL</Td>
-              <Td>{vaultLiability/10**18} $</Td>
-              <Td>{vaultBorrowingPower/10**18}%</Td>
+              <Td> {vaultLiability / 10 ** 18} USDL</Td>
+              <Td>{vaultLiability / 10 ** 18} $</Td>
+              <Td>{vaultBorrowingPower / 10 ** 18}%</Td>
             </Tr>
           </Tbody>
         </Table>
@@ -588,14 +652,14 @@ export default function Borrow() {
                   <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your borrowed amount </Heading>
                 </Center>
                 <Center position='relative' top='-6px'>
-                  <Text fontSize='3xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > 120,350 $</Text>
+                  <Text fontSize='3xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > {(vaultLiability / 10 ** 18).toFixed(5)} $</Text>
                 </Center>
 
                 <Center position='relative' top='10px'>
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='10px'>
-                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > {vaultLiability} USDl </Text>
+                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900'> {(tokenBalance / 10 ** 18).toFixed(5)} USDL </Text>
                 </Center>
 
                 {/*   <Center position='relative' top='-2px'>
