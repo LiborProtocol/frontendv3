@@ -3,6 +3,7 @@ import { Box, Flex, Heading, position } from '@chakra-ui/react'
 import { Center } from '@chakra-ui/react'
 import { useWeb3ExecuteFunction } from 'react-moralis';
 import abiIERC20 from '#modules/AbiIERC20';
+import abiCurve from '#modules/AbiCurve';
 import { Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import { useApiContract } from 'react-moralis';
@@ -57,6 +58,8 @@ export default function Deposit() {
       fetchActiveUsdcBalance();
       fetchActiveUsdiBalance();
       fetchActiveInterestFactor();
+      fetchActiveInterestRatio();
+      fetchActivegetCurveMaster();
     }
   }, [userAccount])
 
@@ -96,18 +99,54 @@ export default function Deposit() {
   const fetchActiveInterestFactor = async () => {
     await getInterestFactor.runContractFunction();
   }
+  
+  const fetchActiveInterestRatio = async () => {
+    await getInterestRatio.runContractFunction();
+  }
+
+  const fetchActivegetCurveMaster = async () => {
+    await getCurveMaster.runContractFunction();
+  }
 
 
   /* MORALIS API CALLS */
 
+
+  
+
+  const getCurveMaster
+  = useApiContract({
+    abi: abiVaultController,
+    address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+    functionName: "getCurveMaster",
+    params: {
+    },
+    chain: 'goerli',
+  });
+
+
   const getInterestFactor
     = useApiContract({
-      abi: abiVaultController,
+      abi: abiCurve,
       address: '0x1244D0A848DCad94A5e7e6270aa5aA950E8c9Dc6',
-      functionName: "interestFactor",
-      params: {},
+      functionName: "getValueAt",
+      params: {
+        curve_address: '0x0000000000000000000000000000000000000000',
+        x_value: ethers.utils.parseUnits('0.25', "ether"),
+      },
       chain: 'goerli',
     });
+
+  const getInterestRatio
+    = useApiContract({
+      abi: abiUSDI,
+      address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+      functionName: "reserveRatio",
+      params: {
+      },
+      chain: 'goerli',
+    });
+
 
   const getTotalSupply
     = useApiContract({
@@ -170,6 +209,9 @@ export default function Deposit() {
   });
 
   console.log(userAccount)
+  console.log(getCurveMaster.data)
+  console.log(getInterestFactor.error)
+  console.log(getInterestFactor.data)
   return (
     <div>
       <Center>
