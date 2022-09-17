@@ -56,6 +56,7 @@ export default function Deposit() {
       fetchActiveUsdcReserve();
       fetchActiveUsdcBalance();
       fetchActiveUsdiBalance();
+      fetchActiveInterestFactor();
     }
   }, [userAccount])
 
@@ -92,13 +93,18 @@ export default function Deposit() {
     await getUsdiBalance.runContractFunction();
   }
 
+  const fetchActiveInterestFactor = async () => {
+    await getInterestFactor.runContractFunction();
+  }
+
+
   /* MORALIS API CALLS */
 
-  const getInterestRate
+  const getInterestFactor
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
-      functionName: "getCurveMaster",
+      address: '0x1244D0A848DCad94A5e7e6270aa5aA950E8c9Dc6',
+      functionName: "interestFactor",
       params: {},
       chain: 'goerli',
     });
@@ -182,7 +188,7 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Current yield </Heading>
             </Center>
             <Center textStyle='data'>
-              {getInterestRate.data} %
+              {getInterestFactor.data/10**16} %
             </Center>
           </Flex>
           <Spacer />
