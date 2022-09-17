@@ -104,7 +104,7 @@ export default function Markets() {
   const [vaultAddress, setVaultAddress] = useState('');
   const [tokenBalance, setTokenBalance] = useState(0);
   const [vaultLiability, setVaultLiability] = useState(0);
-  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0);
+  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0.000001);
   const [totalSupply, setTotalSupply] = useState(0);
   const [UsdcReserve, setUsdcReserve] = useState(0);
   const { isAuthenticated, Moralis, account, user } = useMoralis();
@@ -477,7 +477,7 @@ export default function Markets() {
             </Tr>
           </Tbody>
         </Table>
-        <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='green' bg='red.400' borderRadius='10' top='7px' >
+        <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
           <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
         </Progress>
       </TableContainer>

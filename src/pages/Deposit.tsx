@@ -59,14 +59,6 @@ export default function Deposit() {
     }
   }, [userAccount])
 
-
-
-
-
-
-
-
-
   /* 
    const increaseAllowance = useWeb3ExecuteFunction({
      abi: abiUSDI,
@@ -98,10 +90,6 @@ export default function Deposit() {
 
   const fetchActiveUsdiBalance = async () => {
     await getUsdiBalance.runContractFunction();
-  }
-
-  const fetchApprove = async () => {
-    await getApprove.runContractFunction();
   }
 
   /* MORALIS API CALLS */

@@ -99,7 +99,7 @@ export default function Borrow() {
   const [vaultAddress, setVaultAddress] = useState('');
   const [tokenBalance, setTokenBalance] = useState(0);
   const [vaultLiability, setVaultLiability] = useState(0);
-  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0);
+  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0.000001); //"not null value to guarantee "
   const [userUsdiBalance, setUserUsdiBalance] = useState(0);
   const [userTokenBalance, setUserTokenBalance] = useState(0);
   const { isAuthenticated, Moralis, account, user } = useMoralis();
@@ -441,7 +441,7 @@ export default function Borrow() {
             </Tr>
           </Tbody>
         </Table>
-        <Progress isAnimated hasStripe value={vaultLiability/vaultBorrowingPower*100} height='15px' colorScheme='green' bg='red.400' borderRadius='10' top='7px' >
+        <Progress isAnimated hasStripe value={vaultLiability/vaultBorrowingPower*100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
           <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability/vaultBorrowingPower*100).toFixed(2)}%</ProgressLabel>
         </Progress>
       </TableContainer>
