@@ -27,6 +27,8 @@ import abiUSDI from '#modules/AbiUSDI';
 import abiVaultController from '#modules/AbiVaultController';
 import { useMoralis } from 'react-moralis';
 import { isUndefined } from 'lodash';
+import { TransactionResponse } from '@ethersproject/abstract-provider';
+
 
 export default function Deposit() {
 
@@ -59,10 +61,20 @@ export default function Deposit() {
       fetchActiveUsdiBalance();
       fetchActiveInterestFactor();
       fetchActiveInterestRatio();
-      fetchActivegetCurveMaster();
     }
   }, [userAccount])
 
+  useEffect(() =>{
+
+
+  })
+
+  const [interestFactor, setInterestFactor] = useState(0);
+  const [reserveRatio, setReserveRatio] = useState(0);
+  const [totalSupply, setTotalSupply] = useState(0);
+  const [usdcReserve, setUsdcReserve] = useState(0);
+  const [usdcBalance, setUsdcBalance] = useState(0); //"not null value to guarantee "
+  const [usdiBalance, setUsdiBalance] = useState(0);
   /* 
    const increaseAllowance = useWeb3ExecuteFunction({
      abi: abiUSDI,
@@ -101,12 +113,12 @@ export default function Deposit() {
   }
   
   const fetchActiveInterestRatio = async () => {
-    await getInterestRatio.runContractFunction();
+    await getReserveRatio.runContractFunction();
   }
 
-  const fetchActivegetCurveMaster = async () => {
+ /*  const fetchActivegetCurveMaster = async () => {
     await getCurveMaster.runContractFunction();
-  }
+  } */
 
 
   /* MORALIS API CALLS */
@@ -114,7 +126,7 @@ export default function Deposit() {
 
   
 
-  const getCurveMaster
+/*   const getCurveMaster
   = useApiContract({
     abi: abiVaultController,
     address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
@@ -123,7 +135,7 @@ export default function Deposit() {
     },
     chain: 'goerli',
   });
-
+ */
 
   const getInterestFactor
     = useApiContract({
@@ -137,7 +149,7 @@ export default function Deposit() {
       chain: 'goerli',
     });
 
-  const getInterestRatio
+  const getReserveRatio
     = useApiContract({
       abi: abiUSDI,
       address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
@@ -201,7 +213,7 @@ export default function Deposit() {
 
   });
 
-  const getApprove = useWeb3ExecuteFunction({
+  const doApprove = useWeb3ExecuteFunction({
     abi: abiIERC20,
     contractAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
     functionName: "approve",
@@ -209,7 +221,6 @@ export default function Deposit() {
   });
 
   console.log(userAccount)
-  console.log(getCurveMaster.data)
   console.log(getInterestFactor.error)
   console.log(getInterestFactor.data)
   return (
@@ -230,7 +241,7 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Current yield </Heading>
             </Center>
             <Center textStyle='data'>
-              {getInterestFactor.data/10**16} %
+              {interestFactor/10**16} %
             </Center>
           </Flex>
           <Spacer />
@@ -239,7 +250,7 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USDI supply </Heading>
             </Center>
             <Center textStyle='data'>
-              {(parseInt(getTotalSupply.data || '0') / 10 ** 18).toFixed(2)}  USDI
+              {(totalSupply / 10 ** 18).toFixed(2)}  USDI
             </Center>
           </Flex>
           <Spacer />
@@ -247,14 +258,14 @@ export default function Deposit() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
             </Center>
-            <Center textStyle='data'> {(parseInt(getUsdcReserve.data || '0') * 10 ** 14 / parseInt(getTotalSupply.data || '0')).toFixed(2)} %</Center>
+            <Center textStyle='data'> {(reserveRatio/10**18).toFixed(2)} %</Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > USDC in reserve </Heading></Center>
             <Center textStyle='data'>
-              {(parseInt(getUsdcReserve.data || '0') / 10 ** 6).toFixed(2)} USDC
+              {(usdcReserve / 10 ** 6).toFixed(2)} USDC
             </Center>
           </Flex>
         </Flex>
@@ -269,13 +280,13 @@ export default function Deposit() {
                   <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your USDC Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='-6px'>
-                  <Text textStyle='data'> {(parseInt(getUsdcBalance.data || '0') / 10 ** 6).toFixed(2)} USDC </Text>
+                  <Text textStyle='data'> {(usdcBalance / 10 ** 6).toFixed(2)} USDC </Text>
                 </Center>
                 <Center position='relative' top='10px'>
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your USDL Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='10px'>
-                  <Text textStyle='dataSmall' > {(parseInt(getUsdiBalance.data || '0') / 10 ** 18).toFixed(2)} USDL</Text>
+                  <Text textStyle='dataSmall' > {(usdiBalance / 10 ** 18).toFixed(2)} USDL</Text>
                 </Center>
               </Flex>
             </Center>
@@ -333,8 +344,8 @@ export default function Deposit() {
 
                           if (isAuthenticated) {
 
-                            await (await getApprove.fetch()).wait();
-                            await (await doDeposit.fetch()).wait();
+                            await (await doApprove.fetch() as unknown as TransactionResponse).wait();
+                            await (await doDeposit.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTotalSupply();
                             fetchActiveUsdcReserve();
                             fetchActiveUsdcBalance();
@@ -378,7 +389,7 @@ export default function Deposit() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated) {
-                            await ((await doWithdraw.fetch())).wait();
+                            await (await doWithdraw.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTotalSupply();
                             fetchActiveUsdcReserve();
                             fetchActiveUsdcBalance();
@@ -473,7 +484,7 @@ useEffect(() => { getTotalSupply.runContractFunction(), getTotalSupplyBis.runCon
   });
 
 
-  const getApprove = useWeb3ExecuteFunction({
+  const doApprove = useWeb3ExecuteFunction({
     abi: abiIERC20,
     contractAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
     functionName: "approve",

@@ -50,6 +50,7 @@ import { useMoralisQuery } from 'react-moralis';
 import { useDisclosure } from '@chakra-ui/react';
 import { stringify } from 'querystring';
 import Moralis from 'moralis/types';
+import { TransactionResponse } from '@ethersproject/abstract-provider';
 
 
 export default function Borrow() {
@@ -542,12 +543,12 @@ export default function Borrow() {
 
 
                           if ((isAuthenticated) && (ID.length == 0)) {
-                            await (await mintVault.fetch()).wait();
+                            await (await mintVault.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveVaultID();
                             /* if (getVaultID.data) {
                               setID(getVaultID.data);
                             } */
-                            await (await doTransfer.fetch()).wait();
+                            await (await doTransfer.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
                             /* if (getTokenBalance.data) {
                               setTokenBalance(parseInt(getTokenBalance.data))
@@ -556,7 +557,7 @@ export default function Borrow() {
                           }
 
                           else if (isAuthenticated && (ID.length > 0)) {
-                            await (await doTransfer.fetch()).wait();
+                            await (await doTransfer.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
                             /*
                            if (getTokenBalance.data) {
@@ -598,7 +599,7 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                            await (await doWithdraw.fetch()).wait();
+                            await (await doWithdraw.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
                             /* if (getTokenBalance.data) {
                               setTokenBalance(parseInt(getTokenBalance.data))
@@ -749,11 +750,12 @@ export default function Borrow() {
 
                           if (isAuthenticated && (ID.length > 0)) {
                            
-                            const tx = await doBorrow.fetch();
+/*                             const tx = await doBorrow.fetch();
                             console.log('TEST')
                             console.log(tx.hash);
-                            console.log('BOOM')
-
+                            console.log('BOOM') */
+                            ;
+                            await (await doBorrow.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveVaultLiability();
                             ActionUp2.onClose();
                           }
@@ -799,7 +801,7 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                              await (await doRepay.fetch()).wait(); 
+                              await (await doRepay.fetch() as unknown as TransactionResponse).wait(); 
                               fetchActiveVaultLiability();
                               ActionDown2.onClose();
                               }

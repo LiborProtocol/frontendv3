@@ -1,4 +1,4 @@
-import{at as r,as as a,au as t,av as e}from"./index.b9fe4727.js";const d=r(e)`
+import{av as r,au as a,aw as t,ax as e}from"./index.66e4f00a.js";const d=r(e)`
     background-color: ${a.green};
     border-color: ${a.greenLight};
     color: ${a.white};
@@ -32,4 +32,4 @@ import{at as r,as as a,au as t,av as e}from"./index.b9fe4727.js";const d=r(e)`
     svg {
         fill: ${a.white};
     }
-`;var n={ButtonPrimaryStyled:d};const{ButtonPrimaryStyled:s}=n,c=({...o})=>t(s,{...o});export{c as default};
+`;var n={ButtonPrimaryStyled:d};const{ButtonPrimaryStyled:l}=n,c=({...o})=>t(l,{...o});export{c as default};
