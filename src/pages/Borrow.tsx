@@ -268,6 +268,8 @@ export default function Borrow() {
   console.log(vaultBorrowingPower)
   console.log('END')
 
+  const {fetch, data } = useWeb3ExecuteFunction();
+
   const getVaultsMinted
     = useApiContract({
       abi: abiVaultController,
@@ -437,12 +439,12 @@ export default function Borrow() {
               <Td>Libor Protocol Stablecoin USDL</Td>
               <Td> {vaultLiability / 10 ** 18} USDL</Td>
               <Td>{vaultLiability / 10 ** 18} $</Td>
-              <Td>{(vaultLiability/vaultBorrowingPower*100).toFixed(2)}%</Td>
+              <Td>{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</Td>
             </Tr>
           </Tbody>
         </Table>
-        <Progress isAnimated hasStripe value={vaultLiability/vaultBorrowingPower*100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
-          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability/vaultBorrowingPower*100).toFixed(2)}%</ProgressLabel>
+        <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
+          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
         </Progress>
       </TableContainer>
 
@@ -484,7 +486,7 @@ export default function Borrow() {
                   <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
                 </Center>
                 <Center position='relative' top='10px' textStyle='dataSmall'>
-                {(userTokenBalance/10**18).toFixed(5)} {assetDeposit}
+                  {(userTokenBalance / 10 ** 18).toFixed(5)} {assetDeposit}
                 </Center>
               </Flex>
             </Center>
@@ -603,7 +605,6 @@ export default function Borrow() {
                             } */
                             ActionDown1.onClose();
                           }
-
                         }
 
                         } >
@@ -747,15 +748,25 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                            await (await doBorrow.fetch()).wait();
+                           
+                            const tx = await doBorrow.fetch();
+                            console.log('TEST')
+                            console.log(tx.hash);
+                            console.log('BOOM')
+
                             fetchActiveVaultLiability();
+                            ActionUp2.onClose();
+                          }
+                            
+                            /* await (await doBorrow.fetch()).wait();
+                            fetchActiveVaultLiability();
+                            ActionUp2.onClose(); */
                             /* if (getTokenBalance.data) {
                               setTokenBalance(parseInt(getTokenBalance.data))
                             } */
-                            ActionUp2.onClose();
                           }
 
-                        }
+                        
                         }>
                           Yes
                         </Button>
@@ -788,16 +799,21 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                            await (await doRepay.fetch()).wait();
-                            fetchActiveVaultLiability();
-                            /* if (getTokenBalance.data) {
-                              setTokenBalance(parseInt(getTokenBalance.data))
-                            } */
-                            ActionDown2.onClose();
-                          }
+                              await (await doRepay.fetch()).wait(); 
+                              fetchActiveVaultLiability();
+                              ActionDown2.onClose();
+                              }
+                            }
 
-                        }
-                        } >
+                          
+
+                                                   /*     await (await doRepay.fetch()).wait();
+                                                      fetchActiveVaultLiability();
+                                                      ActionDown2.onClose();
+ */
+
+                        
+                        }>
                           Yes
                         </Button>
                       </Flex>
