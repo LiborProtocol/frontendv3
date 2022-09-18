@@ -1,4 +1,4 @@
-import{as as r,at as l,au as o,av as c,aw as n,ax as s}from"./index.66e4f00a.js";const t=r`
+import{ar as r,as as l,at as o,au as c,av as n,aw as s}from"./index.21a34bee.js";const t=r`
     :after {
         background-color: ${l("light",90)};
     }
@@ -70,7 +70,7 @@ import{as as r,at as l,au as o,av as c,aw as n,ax as s}from"./index.66e4f00a.js"
     }
 
     ${t}
-`,x=e=>{switch(e){case"red":return d;case"green":return u;case"blue":return $;case"yellow":return p;default:return}},b=c(s)`
+`,b=e=>{switch(e){case"red":return d;case"green":return u;case"blue":return $;case"yellow":return p;default:return}},g=c(s)`
     :after {
         background-color: ${l("dark",0)};
         content: '';
@@ -85,5 +85,5 @@ import{as as r,at as l,au as o,av as c,aw as n,ax as s}from"./index.66e4f00a.js"
         z-index: 0;
     }
 
-    ${({color:e})=>e&&x(e)}
-`;var g={ButtonColoredStyled:b};const{ButtonColoredStyled:i}=g,h=({color:e,...a})=>n(i,{color:e,...a});export{h as default};
+    ${({color:e})=>e&&b(e)}
+`;var x={ButtonColoredStyled:g};const{ButtonColoredStyled:i}=x,h=({color:e,...a})=>n(i,{color:e,...a});export{h as default};
