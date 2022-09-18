@@ -64,9 +64,25 @@ export default function Deposit() {
     }
   }, [userAccount])
 
-  useEffect(() =>{
-
-
+  useEffect(() => {
+    if (getInterestFactor.data){
+      setInterestFactor(parseInt(getInterestFactor.data)); 
+    }
+    if (getReserveRatio.data){
+      setReserveRatio(parseInt(getReserveRatio.data))
+    }
+    if (getTotalSupply.data){
+      setTotalSupply(parseInt(getTotalSupply.data))
+    }
+    if (getUsdcReserve.data){
+      setUsdcReserve(parseInt(getUsdcReserve.data))
+    }
+    if (getUsdcBalance.data){
+      setUsdcBalance(parseInt(getUsdcBalance.data))
+    }
+    if (getUsdiBalance.data){
+      setUsdiBalance(parseInt(getUsdiBalance.data))
+    }
   })
 
   const [interestFactor, setInterestFactor] = useState(0);
@@ -258,7 +274,7 @@ export default function Deposit() {
             <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
             </Center>
-            <Center textStyle='data'> {(reserveRatio/10**18).toFixed(2)} %</Center>
+            <Center textStyle='data'> {(reserveRatio/10**16).toFixed(2)} %</Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
