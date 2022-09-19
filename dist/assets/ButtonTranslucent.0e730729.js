@@ -1,4 +1,4 @@
-import{au as s,as as o,at as t,av as e,aw as n}from"./index.21a34bee.js";const l=s(n)`
+import{au as s,as as o,at as t,av as e,aw as n}from"./index.fabb03ce.js";const l=s(n)`
     background-color: ${o("dark",20)};
     color: ${t.white};
 
