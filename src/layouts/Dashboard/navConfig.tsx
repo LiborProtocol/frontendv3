@@ -48,7 +48,7 @@ export const navDashboard = [
   {
     title: 'Documentation',
     icon: <FontAwesomeIcon icon={faQuestionCircle} />,
-    path: 'https://siberiankebab.gitbook.io/untitled/',
+    path: 'https://liborfinance.gitbook.io/libor-protocol/',
   },
 ]
 /* 
