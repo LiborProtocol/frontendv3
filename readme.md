@@ -1,12 +1,11 @@
 ### for dev
 ```
-yarn dev
-```
+npm run dev```
 
 ### for production
 ```
-yarn build
-yarn preview
+npm run build
+npm run preview
 ```
 
 "Functionning version of the app"

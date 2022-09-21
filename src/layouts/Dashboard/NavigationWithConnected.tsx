@@ -61,8 +61,8 @@ export const NavigationWithConnected = ({ onOpen, ...rest }: NavigationWithConne
         icon={<FontAwesomeIcon icon={faBars} />}
       /> */}
 {/*        <Image  boxSize='85px' src={logo} pos='relative' top='8px'/>
- */}      <Heading size='3xl' color='#00EAFF' fontFamily='Oleo Script' pos='fixed' left='50%'> <Text> Libor Protocol </Text></Heading>
-      <Box className="px-2" color='#393E46'>
+ */}      <Heading size='3xl' color='#00EAFF' fontFamily='Oleo Script' pos='fixed' left='50%' textShadow='3px 3px #393E46'> <Text> Libor Protocol </Text></Heading>
+      <Box className="px-2" color='#393E46'>  
 
       {/* Code inside my navBar... */}  
       <ConnectButton />

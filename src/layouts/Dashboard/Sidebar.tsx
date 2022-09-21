@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRoutes, useMatch, useLocation, Link } from 'react-router-dom'
 import { A } from '#components/A'
 import { Center } from '@chakra-ui/react';
+import { Divider } from '@chakra-ui/react';
 
 interface SidebarProps extends BoxProps {
   onClose: () => void
@@ -61,7 +62,8 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
           )
         })}
 
-        <li className="border-t border-white-300 py-2 mx-2 rounded" />
+        <li/>
+        <Divider w='80%' alignSelf='center' />
 
       
       </ul>
