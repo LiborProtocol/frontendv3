@@ -438,26 +438,44 @@ export default function Markets() {
               <Th color='#00EAFF' fontFamily='Merienda One'>Your Value deposited</Th>
               <Th color='#00EAFF' fontFamily='Merienda One'>Your Value deposited in $</Th>
               <Th color='#00EAFF' fontFamily='Merienda One'>Loan-To-Value</Th>
+              <Th color='#00EAFF' fontFamily='Merienda One'>Borrowing power</Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
+              <Td>Wrapped Fantom WFTM</Td>
+              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WFTM</Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>85%</Td>
+              <Td>304$</Td>
             </Tr>
             <Tr>
               <Td>Wrapped Ethereum WETH</Td>
               <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WETH</Td>
               <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
+              <Td>560$</Td>
             </Tr>
             <Tr>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
+              <Td>Wrapped Bitcoin BTC</Td>
+              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WBTC</Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>85%</Td>
+              <Td>280$</Td>
+            </Tr>
+            <Tr>
+              <Td>xBOO</Td>
+              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} xBOO</Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>70%</Td>
+              <Td>400$</Td>
+            </Tr>
+            <Tr>
+              <Td>Total</Td>
+              <Td></Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td></Td>
+              <Td>80$</Td>
             </Tr>
           </Tbody>
           <Thead>
@@ -465,14 +483,16 @@ export default function Markets() {
               <Th color='#00EAFF' fontFamily='Merienda One'>Your Borrowed assets</Th>
               <Th color='#00EAFF' fontFamily='Merienda One'>Your Value Borrowed</Th>
               <Th color='#00EAFF' fontFamily='Merienda One'>Your Value Borrowed in $</Th>
+              <Th color='#00EAFF' fontFamily='Merienda One'>Interest rate</Th>
               <Th color='#00EAFF' fontFamily='Merienda One'>Borrowing power used </Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
               <Td>Libor Protocol Stablecoin USDL</Td>
-              <Td> {vaultLiability / 10 ** 18} USDL</Td>
+              <Td>{vaultLiability / 10 ** 18} USDL</Td>
               <Td>{vaultLiability / 10 ** 18} $</Td>
+              <Td>{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</Td>
               <Td>{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</Td>
             </Tr>
           </Tbody>
@@ -484,7 +504,7 @@ export default function Markets() {
 
       <Center>
         <Flex w='70%' pos="relative" bottom="-10">
-          <TableContainer layerStyle='primary'>
+          <TableContainer layerStyle='primaryData'>
             <Table variant='simple' color='#EEEEEE'>
               <Thead>
                 <Tr>
@@ -521,7 +541,7 @@ export default function Markets() {
             </Table>
           </TableContainer>
           <Spacer />
-          <TableContainer layerStyle='primary'>
+          <TableContainer layerStyle='primaryData'>
             <Table variant='simple' color='#EEEEEE'>
               <Thead>
                 <Tr>

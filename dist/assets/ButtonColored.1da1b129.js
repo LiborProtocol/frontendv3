@@ -1,4 +1,4 @@
-import{ar as r,as as l,at as o,au as c,av as n,aw as s}from"./index.fd35b168.js";const t=r`
+import{an as r,ao as l,ap as o,aq as c,ar as n,as as s}from"./index.4c35b9dd.js";const t=r`
     :after {
         background-color: ${l("light",90)};
     }
@@ -28,7 +28,7 @@ import{ar as r,as as l,at as o,au as c,av as n,aw as s}from"./index.fd35b168.js"
     }
 
     ${t}
-`,u=r`
+`,$=r`
     background-color: ${o.green};
     border-color: ${o.green};
     color: ${o.green};
@@ -42,7 +42,7 @@ import{ar as r,as as l,at as o,au as c,av as n,aw as s}from"./index.fd35b168.js"
     }
 
     ${t}
-`,$=r`
+`,u=r`
     background-color: ${o.blue};
     border-color: ${o.blue};
     color: ${o.blue};
@@ -70,7 +70,7 @@ import{ar as r,as as l,at as o,au as c,av as n,aw as s}from"./index.fd35b168.js"
     }
 
     ${t}
-`,b=e=>{switch(e){case"red":return d;case"green":return u;case"blue":return $;case"yellow":return p;default:return}},g=c(s)`
+`,b=e=>{switch(e){case"red":return d;case"green":return $;case"blue":return u;case"yellow":return p;default:return}},g=c(s)`
     :after {
         background-color: ${l("dark",0)};
         content: '';

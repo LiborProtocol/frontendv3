@@ -65,22 +65,22 @@ export default function Deposit() {
   }, [userAccount])
 
   useEffect(() => {
-    if (getInterestFactor.data){
-      setInterestFactor(parseInt(getInterestFactor.data)); 
+    if (getInterestFactor.data) {
+      setInterestFactor(parseInt(getInterestFactor.data));
     }
-    if (getReserveRatio.data){
+    if (getReserveRatio.data) {
       setReserveRatio(parseInt(getReserveRatio.data))
     }
-    if (getTotalSupply.data){
+    if (getTotalSupply.data) {
       setTotalSupply(parseInt(getTotalSupply.data))
     }
-    if (getUsdcReserve.data){
+    if (getUsdcReserve.data) {
       setUsdcReserve(parseInt(getUsdcReserve.data))
     }
-    if (getUsdcBalance.data){
+    if (getUsdcBalance.data) {
       setUsdcBalance(parseInt(getUsdcBalance.data))
     }
-    if (getUsdiBalance.data){
+    if (getUsdiBalance.data) {
       setUsdiBalance(parseInt(getUsdiBalance.data))
     }
   })
@@ -127,31 +127,31 @@ export default function Deposit() {
   const fetchActiveInterestFactor = async () => {
     await getInterestFactor.runContractFunction();
   }
-  
+
   const fetchActiveInterestRatio = async () => {
     await getReserveRatio.runContractFunction();
   }
 
- /*  const fetchActivegetCurveMaster = async () => {
-    await getCurveMaster.runContractFunction();
-  } */
+  /*  const fetchActivegetCurveMaster = async () => {
+     await getCurveMaster.runContractFunction();
+   } */
 
 
   /* MORALIS API CALLS */
 
 
-  
 
-/*   const getCurveMaster
-  = useApiContract({
-    abi: abiVaultController,
-    address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
-    functionName: "getCurveMaster",
-    params: {
-    },
-    chain: 'goerli',
-  });
- */
+
+  /*   const getCurveMaster
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      functionName: "getCurveMaster",
+      params: {
+      },
+      chain: 'goerli',
+    });
+   */
 
   const getInterestFactor
     = useApiContract({
@@ -257,7 +257,7 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Current yield </Heading>
             </Center>
             <Center textStyle='data'>
-              {interestFactor/10**16} %
+              {(interestFactor/reserveRatio*0.8*100).toFixed(2)} %
             </Center>
           </Flex>
           <Spacer />
@@ -272,18 +272,19 @@ export default function Deposit() {
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
-            </Center>
-            <Center textStyle='data'> {(reserveRatio/10**16).toFixed(2)} %</Center>
-          </Flex>
-          <Spacer />
-          <Flex layerStyle='data'>
-            <Center>
               <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > USDC in reserve </Heading></Center>
             <Center textStyle='data'>
               {(usdcReserve / 10 ** 6).toFixed(2)} USDC
             </Center>
           </Flex>
+          <Spacer />
+          <Flex layerStyle='data'>
+            <Center>
+              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
+            </Center>
+            <Center textStyle='data'> {(reserveRatio / 10 ** 16).toFixed(2)} %</Center>
+          </Flex>
+
         </Flex>
       </Center>
 
@@ -412,7 +413,6 @@ export default function Deposit() {
                             fetchActiveUsdiBalance();
                             ActionDown.onClose();
                           }
-
                         }
                         } >
                           Yes
