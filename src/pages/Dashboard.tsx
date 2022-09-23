@@ -8,6 +8,7 @@ import abiIERC20 from '#modules/AbiIERC20';
 import abiVault from '#modules/AbiVault';
 import abiVaultController from '#modules/AbiVaultController';
 import abiUSDI from '#modules/AbiUSDI';
+import abiCurve from '#modules/AbiCurve';
 import { Text } from '@chakra-ui/react'
 import {
   Table,
@@ -57,10 +58,7 @@ export default function Markets() {
 
   const boxColorPrimary = '#393E46'
   const boxColorSecondary = '#00ADB5'
-  const [number1, setNumber1] = useState("");
-  const [number2, setNumber2] = useState("");
-  const cancelRef = useRef<HTMLButtonElement>(null);
-  const [assetDeposit, setAssetDeposit] = useState("BNB");
+
 
   const fetchActiveVaultID = async () => {
     await getVaultID.runContractFunction();
@@ -70,8 +68,8 @@ export default function Markets() {
     await getVaultAddress.runContractFunction();
   }
 
-  const fetchActiveTokenBalance = async () => {
-    await getTokenBalance.runContractFunction();
+  const fetchActiveWethBalance = async () => {
+    await getWethBalance.runContractFunction();
   }
 
   const fetchActiveVaultLiability = async () => {
@@ -98,16 +96,27 @@ export default function Markets() {
     await getUsdcReserve.runContractFunction();
   }
 
+  const fetchActiveInterestFactor = async () => {
+    await getInterestFactor.runContractFunction();
+  }
+
+  const fetchActiveReserveRatio = async () => {
+    await getReserveRatio.runContractFunction();
+  }
+
   const [userAccount, setAccount] = useState('');
   const [userAddress, setAddress] = useState('');
   const [ID, setID] = useState('');
   const [vaultAddress, setVaultAddress] = useState('');
-  const [tokenBalance, setTokenBalance] = useState(0);
+  const [wethBalance, setWethBalance] = useState(0);
   const [vaultLiability, setVaultLiability] = useState(0);
-  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0.000001);
+  const [vaultBorrowingPower, setVaultBorrowingPower] = useState(0);
   const [totalSupply, setTotalSupply] = useState(0);
   const [UsdcReserve, setUsdcReserve] = useState(0);
+  const [interestFactor, setInterestFactor] = useState(0);
+  const [reserveRatio, setReserveRatio] = useState(0);
   const { isAuthenticated, Moralis, account, user } = useMoralis();
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -150,14 +159,14 @@ export default function Markets() {
 
   useEffect(() => {
     if (vaultAddress.length > 0) {//Not the best way to guarantee vaultAddress is not empty
-      fetchActiveTokenBalance();
+      fetchActiveWethBalance();
     }
   }, [vaultAddress])
 
   useEffect(
     () => {
-      if (getTokenBalance.data) {
-        setTokenBalance(parseInt(getTokenBalance.data))
+      if (getWethBalance.data) {
+        setWethBalance(parseInt(getWethBalance.data))
       }
     },
   )
@@ -214,29 +223,47 @@ export default function Markets() {
     if (userAccount) {
       fetchActiveTotalSupply();
       fetchActiveUsdcReserve();
+      fetchActiveInterestFactor();
+      fetchActiveReserveRatio();
     }
   }, [userAccount])
 
-  useEffect(() =>{
-    if (getTotalSupply.data){
+  useEffect(() => {
+    if (getTotalSupply.data) {
       setTotalSupply(parseInt(getTotalSupply.data))
     }
   }
   )
 
-  useEffect(() =>{
-    if (getUsdcReserve.data){
+  useEffect(() => {
+    if (getUsdcReserve.data) {
       setUsdcReserve(parseInt(getUsdcReserve.data))
     }
   }
   )
+
+  useEffect(() => {
+    if (getInterestFactor.data) {
+      setInterestFactor(parseInt(getInterestFactor.data))
+    }
+  }
+  )
+
+  useEffect(() => {
+    if (getReserveRatio.data) {
+      setReserveRatio(parseInt(getReserveRatio.data))
+    }
+  }
+  )
+
+
 
   /* MORALIS API CALLS */
 
   const getVaultID
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultIDs",
       params: {
         wallet: userAccount,
@@ -247,7 +274,7 @@ export default function Markets() {
   const getVaultAddress
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultAddress",
       params: {
         id: ID[0],
@@ -255,7 +282,7 @@ export default function Markets() {
       chain: 'goerli',
     });
 
-  const getTokenBalance
+  const getWethBalance
     = useApiContract({
       abi: abiVault,
       address: vaultAddress,
@@ -266,31 +293,44 @@ export default function Markets() {
       chain: 'goerli',
     });
 
-
-  console.log('START')
-  console.log(userAccount)
-  console.log(ID)
-  console.log(getVaultID.data)
-  console.log(getVaultAddress.data)
-  console.log(vaultAddress)
-  console.log(tokenBalance)
-  console.log(vaultLiability)
-  console.log(vaultBorrowingPower)
-  console.log('END')
-
-  const getVaultsMinted
+  const getWbtcBalance
     = useApiContract({
-      abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
-      functionName: "vaultsMinted",
-      params: {},
+      abi: abiVault,
+      address: vaultAddress,
+      functionName: "tokenBalance",
+      params: {
+        addr: '0x321162cd933e2be498cd2267a90534a804051b11'
+      },
       chain: 'goerli',
     });
+
+  const getWftmBalance
+    = useApiContract({
+      abi: abiVault,
+      address: vaultAddress,
+      functionName: "tokenBalance",
+      params: {
+        addr: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'
+      },
+      chain: 'goerli',
+    });
+
+  const getXbooBalance
+    = useApiContract({
+      abi: abiVault,
+      address: vaultAddress,
+      functionName: "tokenBalance",
+      params: {
+        addr: '0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE'
+      },
+      chain: 'goerli',
+    });
+
 
   const getVaultBorrowingPower
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultBorrowingPower",
       params: {
         id: ID[0],
@@ -298,10 +338,30 @@ export default function Markets() {
       chain: 'goerli',
     });
 
+  console.log('START')
+  console.log(userAccount)
+  console.log(ID)
+  console.log(getVaultID.data)
+  console.log(getVaultAddress.data)
+  console.log(vaultAddress)
+  console.log(wethBalance)
+  console.log(vaultLiability)
+  console.log(getVaultBorrowingPower.data)
+  console.log('END')
+
+  const getVaultsMinted
+    = useApiContract({
+      abi: abiVaultController,
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      functionName: "vaultsMinted",
+      params: {},
+      chain: 'goerli',
+    });
+
   const getVaultLiability
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultLiability",
       params: {
         id: ID[0],
@@ -323,7 +383,7 @@ export default function Markets() {
   const getUserUsdiBalance
     = useApiContract({
       abi: abiIERC20,
-      address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
       functionName: "balanceOf",
       params: {
         account: userAccount,
@@ -332,10 +392,10 @@ export default function Markets() {
     });
 
 
-    const getTotalSupply
+  const getTotalSupply
     = useApiContract({
       abi: abiUSDI,
-      address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
       functionName: "_totalSupply",
       params: {},
       chain: 'goerli',
@@ -346,79 +406,43 @@ export default function Markets() {
       abi: abiIERC20,
       address: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
       functionName: "balanceOf",
-      params: { account: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918' },
+      params: { account: '0x43120a1c70A06b194eaB354d32089f630c43A4b6' },
+      chain: 'goerli',
+    });
+
+  const getInterestFactor
+    = useApiContract({
+      abi: abiCurve,
+      address: '0x1F770CCda0Ebaa907B9d2B17E6d318A9F036DB8e',
+      functionName: "getValueAt",
+      params: {
+        curve_address: '0x0000000000000000000000000000000000000000',
+        x_value: ethers.utils.parseUnits(reserveRatio.toString(), "wei"),
+      },
+      chain: 'goerli',
+    });
+
+  const getReserveRatio
+    = useApiContract({
+      abi: abiUSDI,
+      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+      functionName: "reserveRatio",
+      params: {
+      },
       chain: 'goerli',
     });
 
   /* PRICE API CALLS */
 
-  const getEthPrice = useTokenPrice({ address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", chain: "eth" });
+  const getEthPrice = useTokenPrice({ address: "0x74b23882a30290451a17c44f4f05243b6b58c76d", chain: "fantom" });
+  const getBtcPrice = useTokenPrice({ address: "0x321162cd933e2be498cd2267a90534a804051b11", chain: "fantom" });
+  const getFtmPrice = useTokenPrice({ address: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83", chain: "fantom" });
+  const getBooPrice = useTokenPrice({ address: "0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE", chain: "fantom" });
+
+
 
   return (
     <>
-      {/*       <TableContainer
-        borderWidth='2px'
-        borderRadius='3xl'
-        p='4'
-        flexDirection='column'
-        justifyContent='space-between'
-        boxShadow='dark-lg'
-        borderColor='blackAlpha.500'
-        bg='#393E46'
-        color='#EEEEEE'
-        fontFamily='Merienda One'
-      >
-        <Table variant='simple' color='#EEEEEE'>
-          <Thead>
-            <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your deposited assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your value deposited</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your value deposited in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Loan-To-Value</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td>Binance Coin</Td>
-              <Td> XXX BNB</Td>
-              <Td>1500$</Td>
-              <Td>85%</Td>
-            </Tr>
-            <Tr>
-              <Td>Wrapped Ethereum</Td>
-              <Td>XXX WETH</Td>
-              <Td>1500$</Td>
-              <Td>85%</Td>
-            </Tr>
-            <Tr>
-              <Td>Wrapped Bitcoin</Td>
-              <Td>XXX BTC</Td>
-              <Td>1500$</Td>
-              <Td>90%</Td>
-            </Tr>
-          </Tbody>
-          <Thead>
-            <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'> Your borrowed assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your value Borrowed</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'> Your Value Borrowed in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'> 	BORROWING POWER USED </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td>Libor Protocol Stablecoin USDl</Td>
-              <Td> XXX USDl</Td>
-              <Td>1500$</Td>
-              <Td>2.5%</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-        <Progress isAnimated hasStripe value={64} height='15px' colorScheme='green' bg='red.400' borderRadius='10' top='7px' >
-          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >60%</ProgressLabel>
-        </Progress>
-      </TableContainer> */}
-
       <TableContainer
         borderWidth='2px'
         borderRadius='3xl'
@@ -444,38 +468,38 @@ export default function Markets() {
           <Tbody>
             <Tr>
               <Td>Wrapped Fantom WFTM</Td>
-              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WFTM</Td>
-              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>{(wethBalance / 10 ** 18).toFixed(4)} WFTM</Td>
+              <Td>{(parseInt(JSON.stringify(getFtmPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
-              <Td>304$</Td>
+              <Td>{((parseInt(JSON.stringify(getFtmPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18) * 0.85).toFixed(2)}$</Td>
             </Tr>
             <Tr>
               <Td>Wrapped Ethereum WETH</Td>
-              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WETH</Td>
-              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>{(wethBalance / 10 ** 18).toFixed(4)} WETH</Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
-              <Td>560$</Td>
+              <Td>{((parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18) * 0.85).toFixed(2)}$</Td>
             </Tr>
             <Tr>
               <Td>Wrapped Bitcoin BTC</Td>
-              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WBTC</Td>
-              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>{(wethBalance / 10 ** 18).toFixed(4)} WBTC</Td>
+              <Td>{(parseInt(JSON.stringify(getBtcPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>85%</Td>
-              <Td>280$</Td>
+              <Td>{((parseInt(JSON.stringify(getBtcPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18) * 0.85).toFixed(2)}$</Td>
             </Tr>
             <Tr>
               <Td>xBOO</Td>
-              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} xBOO</Td>
-              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>{(wethBalance / 10 ** 18).toFixed(4)} xBOO</Td>
+              <Td>{(parseInt(JSON.stringify(getBooPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td>70%</Td>
-              <Td>400$</Td>
+              <Td>{((parseInt(JSON.stringify(getBooPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18) * 0.85).toFixed(2)}$</Td>
             </Tr>
             <Tr>
               <Td>Total</Td>
               <Td></Td>
-              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * wethBalance / 10 ** 18).toFixed(2)}$</Td>
               <Td></Td>
-              <Td>80$</Td>
+              <Td>{(vaultBorrowingPower / 10 ** 18).toFixed(2)} $</Td>
             </Tr>
           </Tbody>
           <Thead>
@@ -492,7 +516,7 @@ export default function Markets() {
               <Td>Libor Protocol Stablecoin USDL</Td>
               <Td>{vaultLiability / 10 ** 18} USDL</Td>
               <Td>{vaultLiability / 10 ** 18} $</Td>
-              <Td>{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</Td>
+              <Td>{(interestFactor / 10 ** 16).toFixed(2)}%</Td>
               <Td>{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</Td>
             </Tr>
           </Tbody>
@@ -521,22 +545,6 @@ export default function Markets() {
                   <Td fontFamily='Merienda One' fontWeight='900'> Target borrow APR :</Td>
                   <Td textStyle='dataSmall'> 1%</Td>
                 </Tr>
-{/*                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Your LTV :</Td>
-                  <Td textStyle='dataSmall'> 85% </Td>
-                </Tr>
-                <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Your value deposited in $ :</Td>
-                  <Td textStyle='dataSmall'> 20300$</Td>
-                </Tr>
-                <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Your value borrow in $ :</Td>
-                  <Td textStyle='dataSmall'> 20300$</Td>
-                </Tr> */}
-                {/*  <Tr>
-                      <Td fontFamily='Merienda One' fontWeight='900'> Binance Coin</Td>
-                      <Td textStyle='dataSmall'> XXX BNB</Td>
-                    </Tr> */}
               </Tbody>
             </Table>
           </TableContainer>
@@ -560,51 +568,64 @@ export default function Markets() {
                 </Tr>
                 <Tr>
                   <Td fontFamily='Merienda One' fontWeight='900'> USDi in Circulation :</Td>
-                  <Td textStyle='dataSmall'> {(totalSupply/10**18).toFixed(2)} </Td>
+                  <Td textStyle='dataSmall'> {(totalSupply / 10 ** 18).toFixed(2)} </Td>
                 </Tr>
                 <Tr>
                   <Td fontFamily='Merienda One' fontWeight='900'> USDC in Reserve :</Td>
-                  <Td textStyle='dataSmall'> {(UsdcReserve/10**6).toFixed(2)}$</Td>
+                  <Td textStyle='dataSmall'> {(UsdcReserve / 10 ** 6).toFixed(2)}$</Td>
                 </Tr>
                 <Tr>
                   <Td fontFamily='Merienda One' fontWeight='900'> Reserve Ratio :</Td>
-                  <Td textStyle='dataSmall'> {(UsdcReserve*10**12/totalSupply*100).toFixed(2)}%</Td>
+                  <Td textStyle='dataSmall'> {(UsdcReserve * 10 ** 12 / totalSupply * 100).toFixed(2)}%</Td>
                 </Tr>
-{/*                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Your reserve Deposit :</Td>
-                  <Td textStyle='dataSmall'> 100$ </Td>
-                </Tr> */}
               </Tbody>
             </Table>
           </TableContainer>
         </Flex>
       </Center>
-      {/* <Center>
-            <Flex w='70%' pos="relative" bottom="-10">
-              <Flex layerStyle='primary'>
-                borrowing market stats
-                Borrow APR :
-                Average LTV :
-                Average borrow per adress :
-              </Flex>
-              <Spacer />
-              <Flex layerStyle='primary'>
-              
-                reserve stats
-                Deposit APR :
-                USDi in Circulation :
-                USDC in Reserve :
-                Reserve Ratio :
-                Average deposits :
-                <Center position='relative' bottom='0px'>
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>           
-                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > 1,450 USDl</Text>
-                </Center>
-              </Flex>
-            </Flex>
-          </Center> */}
     </>
   )
 }
 
+/* GEORLI TESTNET
+ */
 
+/* USDC_WETH_CL: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
+USDC_WETH_POOL: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
+USDC: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+WETH: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+ProxyAdmin: '0xdaFA29d4D7Ce06E6a7e7FBcaD8ee1f2622b1bAb3',
+VaultController: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+USDI: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+Curve: '0x1F770CCda0Ebaa907B9d2B17E6d318A9F036DB8e',
+ThreeLines: '0xbC86805A40C49a77eDaa81b06F1D0495cfa85Ed0',
+Oracle: '0x5A7E5b0b4FB20D5D9647b1615d85ec05cD1474a0',
+WethOracle: '0x5FFC0FEEE03ddBAAF8122c541bb02a716475043c' */
+
+
+/* FTM MAINNET
+ */
+
+/* USDC_WETH_CL: '0x11ddd3d147e5b83d01cee7070027092397d63658',
+USDC_WETH_POOL: '0x11ddd3d147e5b83d01cee7070027092397d63658',
+USDC_WBTC_CL: '0x8e94c22142f4a64b99022ccdd994f4e9ec86e4b4',
+USDC_WBTC_POOL: '0x8e94c22142f4a64b99022ccdd994f4e9ec86e4b4',
+USDC_WFTM_CL: '0xf4766552d15ae4d256ad41b6cf2933482b0680dc',
+USDC_WFTM_POOL: '0xf4766552d15ae4d256ad41b6cf2933482b0680dc',
+USDC_XBOO_CL: '0xc8c80c17f05930876ba7c1dd50d9186213496376',
+USDC_XBOO_POOL: '0xc8c80c17f05930876ba7c1dd50d9186213496376',
+USDC: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75',
+WETH: '0x74b23882a30290451a17c44f4f05243b6b58c76d',
+WBTC: '0x321162cd933e2be498cd2267a90534a804051b11',
+WFTM: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+XBOO: '0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE',
+ProxyAdmin: '0x7196F37A4d2f6745F80da3cb727D636e40828DcC',
+VaultController: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
+USDI: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
+Curve: '0x1ecA0B0fd6B4356A4d947dD0D614e73A01d9Bf29',
+ThreeLines: '0x8161884FF27386800969D7025Ba9C397b68E720C',
+Oracle: '0xEFD28990607793077aa61C6a67F1E3B20dCCc70c',
+WethOracle: '0x646Ce0295a82a60D0e7CaD52E89aFD7F986aF54d',
+WbtcOracle: '0x48616AbF871E96e4854622ded97cA5D78b033fDB',
+WftmOracle: '0xFDa288eF53Dd1dCa3f5A548367174D591ea1B1c5',
+XbooOracle: '0xe57E99c57242d0d245eF7789432168108Cf79c79' */

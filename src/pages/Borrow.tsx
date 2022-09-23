@@ -64,7 +64,7 @@ export default function Borrow() {
   const [number1, setNumber1] = useState("");
   const [number2, setNumber2] = useState("");
   const cancelRef = useRef<HTMLButtonElement>(null);
-  const [assetDeposit, setAssetDeposit] = useState("BNB");
+  const [assetDeposit, setAssetDeposit] = useState("WFTM");
 
   const fetchActiveVaultID = async () => {
     await getVaultID.runContractFunction();
@@ -227,7 +227,7 @@ export default function Borrow() {
   const getVaultID
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultIDs",
       params: {
         wallet: userAccount,
@@ -238,7 +238,7 @@ export default function Borrow() {
   const getVaultAddress
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultAddress",
       params: {
         id: ID[0],
@@ -257,33 +257,10 @@ export default function Borrow() {
       chain: 'goerli',
     });
 
-
-  console.log('START')
-  console.log(userAccount)
-  console.log(ID)
-  console.log(getVaultID.data)
-  console.log(getVaultAddress.data)
-  console.log(vaultAddress)
-  console.log(tokenBalance)
-  console.log(vaultLiability)
-  console.log(vaultBorrowingPower)
-  console.log('END')
-
-  const {fetch, data } = useWeb3ExecuteFunction();
-
-  const getVaultsMinted
-    = useApiContract({
-      abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
-      functionName: "vaultsMinted",
-      params: {},
-      chain: 'goerli',
-    });
-
   const getVaultBorrowingPower
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultBorrowingPower",
       params: {
         id: ID[0],
@@ -294,7 +271,7 @@ export default function Borrow() {
   const getVaultLiability
     = useApiContract({
       abi: abiVaultController,
-      address: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "vaultLiability",
       params: {
         id: ID[0],
@@ -316,7 +293,7 @@ export default function Borrow() {
   const getUserUsdiBalance
     = useApiContract({
       abi: abiIERC20,
-      address: '0xB8Af8C538EE795e5D79cD74F0D00B10FF4a00918',
+      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
       functionName: "balanceOf",
       params: {
         account: userAccount,
@@ -333,7 +310,7 @@ export default function Borrow() {
   const mintVault
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
-      contractAddress: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      contractAddress: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "mintVault",
       params: {},
     });
@@ -352,7 +329,7 @@ export default function Borrow() {
   const doBorrow
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
-      contractAddress: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      contractAddress: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "borrowUsdi",
       params: {
         id: ID[0],
@@ -374,7 +351,7 @@ export default function Borrow() {
   const doRepay
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
-      contractAddress: '0x0d9bC0A527f72CAB1591d13aFeC74810744FA184',
+      contractAddress: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
       functionName: "repayUSDi",
       params: {
         id: ID[0],
@@ -383,10 +360,25 @@ export default function Borrow() {
     });
 
 
+  console.log('START')
+  console.log(isAuthenticated)
+  console.log(userAccount)
+  console.log(ID)
+  console.log(ID.length)
+  console.log(getVaultID.data)
+  console.log(getVaultAddress.data)
+  console.log(getUserTokenBalance.data)
+  console.log(vaultAddress)
+  console.log(tokenBalance)
+  console.log(vaultLiability)
+  console.log(vaultBorrowingPower)
+  console.log('END')
+
+
 
   return (
     <div>
-      <TableContainer
+      {/* <TableContainer
         borderWidth='2px'
         borderRadius='3xl'
         p='4'
@@ -447,9 +439,7 @@ export default function Borrow() {
         <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
           <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
         </Progress>
-      </TableContainer>
-
-
+      </TableContainer> */}
 
       <Center>
         <Flex w='70%' pos="relative" bottom="-10">
@@ -471,13 +461,16 @@ export default function Borrow() {
                     <Center>
                       <MenuList bg='#EEEEEE' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Merienda One' borderRadius='20' >
 
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('BNB')} borderRadius='20' >BNB</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WFTM')} borderRadius='20' >WFTM</MenuItem>
                         <MenuDivider />
 
                         <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')} >WETH</MenuItem>
                         <MenuDivider />
 
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')} borderRadius='20'>WBTC</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')} >WBTC</MenuItem>
+                        <MenuDivider />
+
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')} borderRadius='20'>XBOO</MenuItem>
 
                       </MenuList>
                     </Center>
@@ -542,27 +535,17 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
 
-                          if ((isAuthenticated) && (ID.length == 0)) {
+                          if ((isAuthenticated) && (ID.length === 0)) {
                             await (await mintVault.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveVaultID();
-                            /* if (getVaultID.data) {
-                              setID(getVaultID.data);
-                            } */
                             await (await doTransfer.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
-                            /* if (getTokenBalance.data) {
-                              setTokenBalance(parseInt(getTokenBalance.data))
-                            } */
                             ActionUp1.onClose();
                           }
 
-                          else if (isAuthenticated && (ID.length > 0)) {
+                          else if ((isAuthenticated) && (ID.length > 0)) {
                             await (await doTransfer.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
-                            /*
-                           if (getTokenBalance.data) {
-                             setTokenBalance(parseInt(getTokenBalance.data))
-                           } */
                             ActionUp1.onClose();
                           }
 
@@ -601,9 +584,6 @@ export default function Borrow() {
                           if (isAuthenticated && (ID.length > 0)) {
                             await (await doWithdraw.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
-                            /* if (getTokenBalance.data) {
-                              setTokenBalance(parseInt(getTokenBalance.data))
-                            } */
                             ActionDown1.onClose();
                           }
                         }
@@ -749,26 +729,12 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                           
-/*                             const tx = await doBorrow.fetch();
-                            console.log('TEST')
-                            console.log(tx.hash);
-                            console.log('BOOM') */
-                            ;
-                            await (await doBorrow.fetch() as unknown as TransactionResponse).wait();
+                            doBorrow.fetch();
+                            /* await (await doBorrow.fetch() as unknown as TransactionResponse).wait(); */
                             fetchActiveVaultLiability();
-                            ActionUp2.onClose();
+                            ActionUp2.onClose;
                           }
-                            
-                            /* await (await doBorrow.fetch()).wait();
-                            fetchActiveVaultLiability();
-                            ActionUp2.onClose(); */
-                            /* if (getTokenBalance.data) {
-                              setTokenBalance(parseInt(getTokenBalance.data))
-                            } */
-                          }
-
-                        
+                        }
                         }>
                           Yes
                         </Button>
@@ -801,20 +767,11 @@ export default function Borrow() {
                         <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                              await (await doRepay.fetch() as unknown as TransactionResponse).wait(); 
-                              fetchActiveVaultLiability();
-                              ActionDown2.onClose();
-                              }
-                            }
-
-                          
-
-                                                   /*     await (await doRepay.fetch()).wait();
-                                                      fetchActiveVaultLiability();
-                                                      ActionDown2.onClose();
- */
-
-                        
+                            await (await doRepay.fetch() as unknown as TransactionResponse).wait();
+                            fetchActiveVaultLiability();
+                            ActionDown2.onClose();
+                          }
+                        }
                         }>
                           Yes
                         </Button>
@@ -845,16 +802,3 @@ ThreeLines: '0xB112408755314782a4519988284E646aF18641da',
 Oracle: '0xDD65D6FDD4A7ba6f4c9d70544032689bF618A2b3',
 WethOracle: '0x08B8b8dE291B5A88D18b4F754e29A1a8719bDfd4', */
 
-
-/* 12/09/2022
-USDC_WETH_CL: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
-USDC_WETH_POOL: '0x6337b3caf9c5236c7f3d1694410776119edaf9fa',
-USDC: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-WETH: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-ProxyAdmin: '0x145A8d7C814d314874FE3B5E948EcF74DAA71aa0',
-VaultController: '0x943Bba10Ca78FbB5a358E5d3af7EAa9e98FDba2f',
-USDI: '0x593a7F6b29a8B16B86bD4dE8CcE262B6b4840E9d',
-Curve: '0xa1AaB8d3f7f13DA7FCFE34c137cC572b42a56732',
-ThreeLines: '0xf646358345Dd893105702aC4a7d4d31904A420a6',
-Oracle: '0x53d4089c31826D0c56eFF18dF818dCCe5075B7C7',
-WethOracle: '0x9DA6F96B2C677de973FeAe107d77Eb34f99d18D0' */
