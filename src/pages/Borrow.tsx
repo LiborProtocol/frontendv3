@@ -459,18 +459,18 @@ export default function Borrow() {
 
 
                     <Center>
-                      <MenuList bg='#EEEEEE' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Merienda One' borderRadius='20' >
+                      <MenuList  bg='#00ADB5' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Merienda One' borderRadius='20' >
 
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WFTM')} borderRadius='20' >WFTM</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WFTM')} bg='#00ADB5' borderRadius='20' >WFTM</MenuItem>
                         <MenuDivider />
 
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')} >WETH</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')}  bg='#00ADB5' >WETH</MenuItem>
                         <MenuDivider />
 
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')} >WBTC</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')}  bg='#00ADB5' >WBTC</MenuItem>
                         <MenuDivider />
 
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')} borderRadius='20'>XBOO</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')}  bg='#00ADB5' borderRadius='20'>XBOO</MenuItem>
 
                       </MenuList>
                     </Center>

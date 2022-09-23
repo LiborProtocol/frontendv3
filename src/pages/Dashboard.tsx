@@ -104,6 +104,19 @@ export default function Markets() {
     await getReserveRatio.runContractFunction();
   }
 
+  const fetchActiveWethPrice = async () => {
+    await getReserveRatio.runContractFunction();
+  }
+  const fetchActiveWbtcPrice = async () => {
+    await getReserveRatio.runContractFunction();
+  }
+  const fetchActiveWftmPrice = async () => {
+    await getReserveRatio.runContractFunction();
+  }
+  const fetchActiveXbooPrice = async () => {
+    await getReserveRatio.runContractFunction();
+  }
+
   const [userAccount, setAccount] = useState('');
   const [userAddress, setAddress] = useState('');
   const [ID, setID] = useState('');
@@ -118,145 +131,12 @@ export default function Markets() {
   const { isAuthenticated, Moralis, account, user } = useMoralis();
 
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (user) {
-        setAddress(user.attributes.ethAddress);
-      }
-      if (account) {
-        setAccount(account);
-      }
-    }
-  })
+  /* PRICE API CALLS */
 
-  useEffect(() => {
-    if (userAccount) {
-      fetchActiveVaultID();
-    }
-  }, [userAccount])
-
-  useEffect(
-    () => {
-      if (getVaultID.data) {
-        setID(getVaultID.data)
-      }
-    },
-  )
-
-  useEffect(() => {
-    if (ID.length > 0) {
-      fetchActiveVaultAddress();
-    }
-  }, [ID])
-
-  useEffect(
-    () => {
-      if (getVaultAddress.data) {
-        setVaultAddress(getVaultAddress.data)
-      }
-    },
-  )
-
-  useEffect(() => {
-    if (vaultAddress.length > 0) {//Not the best way to guarantee vaultAddress is not empty
-      fetchActiveWethBalance();
-    }
-  }, [vaultAddress])
-
-  useEffect(
-    () => {
-      if (getWethBalance.data) {
-        setWethBalance(parseInt(getWethBalance.data))
-      }
-    },
-  )
-
-  useEffect(
-    () => {
-      if (ID.length > 0) {
-        fetchActiveVaultLiability();
-      }
-    }, [ID]
-  )
-
-  useEffect(
-    () => {
-      if (getVaultLiability.data) {
-        setVaultLiability(parseInt(getVaultLiability.data))
-      }
-    },
-  )
-
-  useEffect(
-    () => {
-      if (ID.length > 0) {
-        fetchActiveVaultBorrowingPower();
-      }
-    }, [ID]
-  )
-
-  useEffect(
-    () => {
-      if (getVaultBorrowingPower.data) {
-        setVaultBorrowingPower(parseInt(getVaultBorrowingPower.data))
-      }
-    },
-  )
-
-  useEffect(
-    () => {
-      if (ID.length > 0) {
-        fetchActiveUserTokenBalance();
-      }
-    }, [ID]
-  )
-
-  useEffect(
-    () => {
-      if (ID.length > 0) {
-        fetchActiveUserUsdiBalance();
-      }
-    }, [ID]
-  )
-
-  useEffect(() => {
-    if (userAccount) {
-      fetchActiveTotalSupply();
-      fetchActiveUsdcReserve();
-      fetchActiveInterestFactor();
-      fetchActiveReserveRatio();
-    }
-  }, [userAccount])
-
-  useEffect(() => {
-    if (getTotalSupply.data) {
-      setTotalSupply(parseInt(getTotalSupply.data))
-    }
-  }
-  )
-
-  useEffect(() => {
-    if (getUsdcReserve.data) {
-      setUsdcReserve(parseInt(getUsdcReserve.data))
-    }
-  }
-  )
-
-  useEffect(() => {
-    if (getInterestFactor.data) {
-      setInterestFactor(parseInt(getInterestFactor.data))
-    }
-  }
-  )
-
-  useEffect(() => {
-    if (getReserveRatio.data) {
-      setReserveRatio(parseInt(getReserveRatio.data))
-    }
-  }
-  )
-
-
+  const getEthPrice = useTokenPrice({ address: "0x74b23882a30290451a17c44f4f05243b6b58c76d", chain: "fantom" });
+  const getBtcPrice = useTokenPrice({ address: "0x321162cd933e2be498cd2267a90534a804051b11", chain: "fantom" });
+  const getFtmPrice = useTokenPrice({ address: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83", chain: "fantom" });
+  const getBooPrice = useTokenPrice({ address: "0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE", chain: "fantom" });
 
   /* MORALIS API CALLS */
 
@@ -338,26 +218,6 @@ export default function Markets() {
       chain: 'goerli',
     });
 
-  console.log('START')
-  console.log(userAccount)
-  console.log(ID)
-  console.log(getVaultID.data)
-  console.log(getVaultAddress.data)
-  console.log(vaultAddress)
-  console.log(wethBalance)
-  console.log(vaultLiability)
-  console.log(getVaultBorrowingPower.data)
-  console.log('END')
-
-  const getVaultsMinted
-    = useApiContract({
-      abi: abiVaultController,
-      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
-      functionName: "vaultsMinted",
-      params: {},
-      chain: 'goerli',
-    });
-
   const getVaultLiability
     = useApiContract({
       abi: abiVaultController,
@@ -390,7 +250,6 @@ export default function Markets() {
       },
       chain: 'goerli',
     });
-
 
   const getTotalSupply
     = useApiContract({
@@ -432,14 +291,93 @@ export default function Markets() {
       chain: 'goerli',
     });
 
-  /* PRICE API CALLS */
+  // UPDATES OF DASHBOARD DATA
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user) {
+        setAddress(user.attributes.ethAddress);
+      }
+      if (account) {
+        setAccount(account);
+      }
+    }
+  })
 
-  const getEthPrice = useTokenPrice({ address: "0x74b23882a30290451a17c44f4f05243b6b58c76d", chain: "fantom" });
-  const getBtcPrice = useTokenPrice({ address: "0x321162cd933e2be498cd2267a90534a804051b11", chain: "fantom" });
-  const getFtmPrice = useTokenPrice({ address: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83", chain: "fantom" });
-  const getBooPrice = useTokenPrice({ address: "0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE", chain: "fantom" });
+  useEffect(() => {
+    if (userAccount) {
+      fetchActiveVaultID();
+    }
+  }, [userAccount])
 
+  useEffect(() => {
+    if (vaultAddress.length > 0) {//Not the best way to guarantee vaultAddress is not empty
+      fetchActiveWethBalance();
+    }
+  }, [vaultAddress])
 
+  useEffect(
+    () => {
+      if (ID.length > 0) {
+        fetchActiveVaultAddress();
+        fetchActiveVaultLiability();
+        fetchActiveVaultBorrowingPower();
+        fetchActiveUserTokenBalance();
+        fetchActiveUserUsdiBalance();
+      }
+    }, [ID]
+  )
+
+  useEffect(() => {
+    if (userAccount) {
+      fetchActiveTotalSupply();
+      fetchActiveUsdcReserve();
+      fetchActiveReserveRatio();
+      fetchActiveInterestFactor();
+    }
+  }, [userAccount])
+
+  useEffect(() => {
+    if (getVaultID.data) {
+      setID(getVaultID.data)
+    }
+    if (getWethBalance.data) {
+      setWethBalance(parseInt(getWethBalance.data))
+    }
+    if (getVaultAddress.data) {
+      setVaultAddress(getVaultAddress.data)
+    }
+    if (getVaultLiability.data) {
+      setVaultLiability(parseInt(getVaultLiability.data))
+    }
+    if (getVaultBorrowingPower.data) {
+      setVaultBorrowingPower(parseInt(getVaultBorrowingPower.data))
+    }
+    if (getTotalSupply.data) {
+      setTotalSupply(parseInt(getTotalSupply.data))
+    }
+    if (getUsdcReserve.data) {
+      setUsdcReserve(parseInt(getUsdcReserve.data))
+    }
+    if (getReserveRatio.data) {
+      setReserveRatio(parseInt(getReserveRatio.data))
+    }
+    if (getInterestFactor.data) {
+      setInterestFactor(parseInt(getInterestFactor.data))
+    }
+  }
+  )
+
+  console.log('START')
+  console.log(userAccount)
+  console.log(ID)
+  console.log(getVaultID.data)
+  console.log(getVaultAddress.data)
+  console.log(vaultAddress)
+  console.log(wethBalance)
+  console.log(vaultLiability)
+  console.log(getVaultBorrowingPower.data)
+  console.log('END')
 
   return (
     <>
