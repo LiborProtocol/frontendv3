@@ -111,37 +111,35 @@ export default function Seed() {
         >
           <Flex layerStyle='data'>
             <Center >
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total ETH raised</Heading>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Total ETH raised</Heading>
             </Center>
             <Center textStyle='data'>
-            {(parseInt(getTotalWeiContributed.data ||'0') / 10 ** 18).toFixed(2)} ETH
-            
+              {(parseInt(getTotalWeiContributed.data || '0') / 10 ** 18).toFixed(2)} ETH
+
             </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current deposit </Heading>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Your current deposit </Heading>
             </Center>
             <Center textStyle='data'>
-              {(parseInt(getInvestorBalances.data ||'0') / 10 ** 18).toFixed(2)}  ETH
+              {(parseInt(getInvestorBalances.data || '0') / 10 ** 18).toFixed(2)}  ETH
             </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current token allocation </Heading>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Your current token allocation </Heading>
             </Center>
             <Center textStyle='data'> {(parseInt(getMySeedTokens.data || '0') / 10 ** 18).toFixed(0)} </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Current LIBOR token price</Heading></Center>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Current LIBOR token price</Heading></Center>
             <Center textStyle='data'>
-            {/* parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2))*parseInt(getTotalWeiContributed.data || '0')/10**18/(3*10**9)  */}
-            
-            0.0012$
+              0.0012$
             </Center>
           </Flex>
         </Flex>
@@ -152,22 +150,27 @@ export default function Seed() {
           <Flex layerStyle='primary'>
             <Center>
               <Flex layerStyle='secondary'>
-                <Center position='relative' top='-6px'>
-                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your deposited amount </Heading>
+                <Center position='relative' top='0px'>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold'> Your deposited amount </Heading>
                 </Center>
-                <Center position='relative' top='-6px'>
+                <Center position='relative' top='0px'>
                   <Text textStyle='data'> 120,350 $</Text>
                 </Center>
-                <Center position='relative' top='10px'>
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>
+                <Center position='relative' top='6px'>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold'> Your Wallet Balance </Heading>
                 </Center>
-                <Center position='relative' top='10px'>
-                  <Text textStyle='dataSmall' > 1,450 USDl</Text>
+                <Center position='relative' top='6px'>
+                  <Text textStyle='data' > 1,450 USDL</Text>
                 </Center>
               </Flex>
             </Center>
 
-            <NumberInput variant='NumberInputField' value={number} onChange={value => setNumber(value)}>
+            <NumberInput variant='NumberInputField' value={number} onChange={value => {
+              if (!isNaN(+value)) {
+                setNumber(value)
+              }
+            }
+            }>
               <Center>
                 <NumberInputField
                   borderColor='grey'
@@ -197,7 +200,7 @@ export default function Seed() {
                 isOpen={ActionUp.isOpen}
                 isCentered
               >
-                <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' /> 
+                <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />
                 <AlertDialogContent bg='#393E46' borderRadius='20px' w='2000px'>
                   <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm Deposit</AlertDialogHeader>
                   <AlertDialogCloseButton />
@@ -214,18 +217,18 @@ export default function Seed() {
 
 
 
-                      onClick={() => doDeposit.fetch({
-                         params: {
-                           abi: abiSeedRound,
-                           contractAddress: '0xa0A56825246b59C1a84b805B1a6acC410fDFcE04',
-                           functionName: "reserve",
-                           params: {},
-                           msgValue: parseInt(number||'0') *10**18,
-                         }
-                       })}
+                        onClick={() => doDeposit.fetch({
+                          params: {
+                            abi: abiSeedRound,
+                            contractAddress: '0xa0A56825246b59C1a84b805B1a6acC410fDFcE04',
+                            functionName: "reserve",
+                            params: {},
+                            msgValue: parseInt(number || '0') * 10 ** 18,
+                          }
+                        })}
 
-                         disabled={doDeposit.isFetching}
-                        
+                        disabled={doDeposit.isFetching}
+
 
                       >
                         Yes

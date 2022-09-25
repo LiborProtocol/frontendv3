@@ -26,7 +26,7 @@ import { useRef } from 'react';
 import abiUSDI from '#modules/AbiUSDI';
 import { useMoralis } from 'react-moralis';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
-import "@fontsource/open-sans"; 
+import "@fontsource/open-sans";
 import "@fontsource/montserrat";
 
 
@@ -234,13 +234,13 @@ export default function Deposit() {
               <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Current yield </Heading>
             </Center>
             <Center textStyle='data'>
-              {(interestFactor/10**16).toFixed(2)} %
+              {(interestFactor / 10 ** 16).toFixed(2)} %
             </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > Total USDL supply </Heading>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Total USDL supply </Heading>
             </Center>
             <Center textStyle='data'>
               {(totalSupply / 10 ** 18).toFixed(2)}  USDL
@@ -249,7 +249,7 @@ export default function Deposit() {
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > USDC in reserve </Heading></Center>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > USDC in reserve </Heading></Center>
             <Center textStyle='data'>
               {(usdcReserve / 10 ** 6).toFixed(2)} USDC
             </Center>
@@ -257,7 +257,7 @@ export default function Deposit() {
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > Reserve Ratio </Heading>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Reserve Ratio </Heading>
             </Center>
             <Center textStyle='data'> {(reserveRatio / 10 ** 16).toFixed(2)} %</Center>
           </Flex>
@@ -277,7 +277,7 @@ export default function Deposit() {
                   <Text textStyle='data'> {(usdcBalance / 10 ** 6).toFixed(2)} USDC </Text>
                 </Center>
                 <Center position='relative' top='5px'>
-                  <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > Your USDL Wallet Balance </Heading>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Your USDL Wallet Balance </Heading>
                 </Center>
                 <Center position='relative' top='5px'>
                   <Text textStyle='data'> {(usdiBalance / 10 ** 18).toFixed(2)} USDL</Text>
@@ -285,9 +285,14 @@ export default function Deposit() {
               </Flex>
             </Center>
 
-            <NumberInput variant='NumberInputField'
+            <NumberInput
               value={number}
-              onChange={value => setNumber(value)}
+              onChange={value => {
+                if (!isNaN(+value)) {
+                  setNumber(value)
+                }
+              }
+              }
             >
               <Center>
                 <NumberInputField

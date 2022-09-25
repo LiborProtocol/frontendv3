@@ -53,6 +53,7 @@ import { useDisclosure } from '@chakra-ui/react';
 import { stringify } from 'querystring';
 import Moralis from 'moralis/types';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import { isInteger, isNumber } from 'lodash';
 
 
 export default function Borrow() {
@@ -391,7 +392,7 @@ export default function Borrow() {
         bg={boxColorPrimary}
         color='#EEEEEE'
       >
-        <Table variant='simple' color='#EEEEEE'  textStyle='tableHeader'>
+        <Table variant='simple' color='#EEEEEE' textStyle='tableHeader'>
           <Thead>
             <Tr>
               <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> Your deposited Assets</Th>
@@ -440,8 +441,8 @@ export default function Borrow() {
         <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
           <ProgressLabel fontSize='lg' fontFamily='Montserrat' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
         </Progress>
-      </TableContainer> 
-  
+      </TableContainer>
+
       <Center>
         <Flex w='70%' pos="relative" bottom="-10">
           <Flex layerStyle='primary'>
@@ -456,14 +457,14 @@ export default function Borrow() {
                       {assetDeposit}
                     </MenuButton>
                     <Center>
-                      <MenuList  bg='cyan.700' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Montserrat' borderRadius='20'>
-                        <MenuItem justifyContent={'center'} _focus={ { bg: "charcoal.500" } } onClick={() => setAssetDeposit('WFTM')} borderRadius='20' >WFTM</MenuItem>
+                      <MenuList bg='cyan.700' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Montserrat' borderRadius='20' >
+                        <MenuItem _hover={{ bg: "transparent" }} _focus={{ bg: "transparent" }} justifyContent={'center'} onClick={() => setAssetDeposit('WFTM')} borderRadius='20' >WFTM</MenuItem>
                         <MenuDivider />
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')}>WETH</MenuItem>
+                        <MenuItem _hover={{ bg: "transparent" }} _focus={{ bg: "transparent" }} justifyContent={'center'} onClick={() => setAssetDeposit('WETH')}>WETH</MenuItem>
                         <MenuDivider />
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')}>WBTC</MenuItem>
+                        <MenuItem _hover={{ bg: "transparent" }} _focus={{ bg: "transparent" }} justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')}>WBTC</MenuItem>
                         <MenuDivider />
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')} borderRadius='20'>XBOO</MenuItem>
+                        <MenuItem _hover={{ bg: "transparent" }} _focus={{ bg: "transparent" }} justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')} borderRadius='20'>XBOO</MenuItem>
                       </MenuList>
                     </Center>
                   </Menu>
@@ -476,9 +477,12 @@ export default function Borrow() {
                 </Center>
               </Flex>
             </Center>
-
-
-            <NumberInput value={number1} onChange={value => setNumber1(value)}>
+            <NumberInput value={number1} onChange={value => {
+              if (!isNaN(+value)) {
+                setNumber1(value)
+              }
+            }
+            }>
               <Center>
                 <NumberInputField
                   borderColor='grey'
@@ -594,7 +598,7 @@ export default function Borrow() {
           >
             <Center>
               <Flex
-layerStyle='secondary'
+                layerStyle='secondary'
               >
 
                 <Center position='relative' top='0px'>
@@ -602,7 +606,7 @@ layerStyle='secondary'
                 </Center>
                 <Center position='relative' top='0px'>
                   <Text textStyle='data' > {(vaultLiability / 10 ** 18).toFixed(5)} $</Text>
-                </Center> 
+                </Center>
                 <Center position='relative' top='5px'>
                   <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Your Wallet Balance </Heading>
                 </Center>
@@ -614,7 +618,13 @@ layerStyle='secondary'
 
             </Center>
 
-            <NumberInput value={number2} onChange={value => setNumber2(value)}>
+            <NumberInput value={number2} onChange={value => 
+              {
+                if (!isNaN(+value)) {
+                  setNumber2(value)
+                }
+              }
+              }>
               <Center>
                 <NumberInputField
                   borderColor='grey'
@@ -660,10 +670,10 @@ layerStyle='secondary'
                           No
                         </Button>
                         <Spacer />
-                          <Button bgColor='green.500' w='12' onClick={async () => {
+                        <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                            await (await doBorrow.fetch() as unknown as TransactionResponse).wait(); 
+                            await (await doBorrow.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveVaultLiability();
                             ActionUp2.onClose;
                           }
