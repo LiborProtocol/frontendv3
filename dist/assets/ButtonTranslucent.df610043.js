@@ -1,4 +1,4 @@
-import{aq as o,ao as s,ap as t,ar as e,as as n}from"./index.2e6b1144.js";const r=o(n)`
+import{aq as o,ao as s,ap as t,ar as e,as as n}from"./index.17687eb7.js";const r=o(n)`
     background-color: ${s("dark",20)};
     color: ${t.white};
 

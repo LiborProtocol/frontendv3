@@ -20,6 +20,8 @@ import { Progress, ProgressLabel } from '@chakra-ui/react'
 import { Center } from '@chakra-ui/react'
 import { Text } from '@chakra-ui/react'
 import { Heading } from '@chakra-ui/react'
+import "@fontsource/montserrat";
+
 
 export default function Markets() {
 
@@ -34,19 +36,18 @@ export default function Markets() {
         boxShadow='dark-lg'
         borderColor='blackAlpha.500'
         bg='#393E46'
-        color='#EEEEEE'
-        fontFamily='Merienda One'
+        fontFamily='Montserrat'
       >
         <Table variant='simple' color='#EEEEEE'>
           <Thead>
             <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Deposited assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Total value deposited</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Total value deposited in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Loan-To-Value</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Deposited assets</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Total value deposited</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Total value deposited in $</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Loan-To-Value</Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody  fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
             <Tr>
               <Td>Binance Coin</Td>
               <Td> XXX BNB</Td>
@@ -68,13 +69,13 @@ export default function Markets() {
           </Tbody>
           <Thead>
             <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Borrowed assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Total Value Borrowed</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Total Value Borrowed in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Current Borrow rate </Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Borrowed assets</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Total Value Borrowed</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Total Value Borrowed in $</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Current Borrow rate </Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
             <Tr>
               <Td>Libor Protocol Stablecoin USDl</Td>
               <Td> XXX USDl</Td>
@@ -91,35 +92,31 @@ export default function Markets() {
             <Table variant='simple' color='#EEEEEE'>
               <Thead>
                 <Tr>
-                  <Th color='#00EAFF' fontFamily='Merienda One'>borrowing market stats</Th>
-                  <Th color='#00EAFF' fontFamily='Merienda One'></Th>
+                  <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>borrowing market stats</Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
-              <Tbody >
+              <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light' >
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Current borrow APR :</Td>
-                  <Td textStyle='dataSmall'> 2.5%</Td>
+                  <Td> Current borrow APR :</Td>
+                  <Td> 2.5%</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Target borrow APR :</Td>
-                  <Td textStyle='dataSmall'> 1%</Td>
+                  <Td> Target borrow APR :</Td>
+                  <Td> 1%</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Average LTV :</Td>
-                  <Td textStyle='dataSmall'> 85% </Td>
+                  <Td> Average LTV :</Td>
+                  <Td> 85% </Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Average collateral per adress :</Td>
-                  <Td textStyle='dataSmall'> 20300$</Td>
+                  <Td> Average collateral per adress :</Td>
+                  <Td> 20300$</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Average borrow per adress :</Td>
-                  <Td textStyle='dataSmall'> 20300$</Td>
+                  <Td> Average borrow per adress :</Td>
+                  <Td> 20300$</Td>
                 </Tr>
-               {/*  <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Binance Coin</Td>
-                  <Td textStyle='dataSmall'> XXX BNB</Td>
-                </Tr> */}
               </Tbody>
             </Table>
           </TableContainer>
@@ -128,64 +125,40 @@ export default function Markets() {
             <Table variant='simple' color='#EEEEEE'>
               <Thead>
                 <Tr>
-                  <Th color='#00EAFF' fontFamily='Merienda One'>Reserve Stats</Th>
-                  <Th color='#00EAFF' fontFamily='Merienda One'></Th>
+                  <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Reserve Stats</Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
-              <Tbody>
+              <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
                 <Tr>
-                  <Td  fontFamily='Merienda One' fontWeight='900'> Current Deposit APR :</Td>
-                  <Td textStyle='dataSmall'> 2.5%</Td>
+                  <Td> Current Deposit APR :</Td>
+                  <Td> 2.5%</Td>
                 </Tr>
                 <Tr>
-                  <Td  fontFamily='Merienda One' fontWeight='900'> Target Deposit APR :</Td>
-                  <Td textStyle='dataSmall'> 2.5%</Td>
+                  <Td> Target Deposit APR :</Td>
+                  <Td> 2.5%</Td>
                 </Tr>
                 <Tr>
-                  <Td  fontFamily='Merienda One' fontWeight='900'> USDi in Circulation :</Td>
-                  <Td textStyle='dataSmall'> 12000 </Td>
+                  <Td> USDi in Circulation :</Td>
+                  <Td> 12000 </Td>
                 </Tr>
                 <Tr>
-                  <Td  fontFamily='Merienda One' fontWeight='900'> USDC in Reserve :</Td>
-                  <Td textStyle='dataSmall'> 20300$</Td>
+                  <Td> USDC in Reserve :</Td>
+                  <Td> 20300$</Td>
                 </Tr>
                 <Tr>
-                  <Td  fontFamily='Merienda One' fontWeight='900'> Reserve Ratio :</Td>
-                  <Td textStyle='dataSmall'> 48%</Td>
+                  <Td> Reserve Ratio :</Td>
+                  <Td> 48%</Td>
                 </Tr>
                 <Tr>
-                  <Td  fontFamily='Merienda One' fontWeight='900'> Average Deposit :</Td>
-                  <Td textStyle='dataSmall'> 100$ </Td>
+                  <Td> Average Deposit :</Td>
+                  <Td> 100$ </Td>
                 </Tr>
               </Tbody>
             </Table>
           </TableContainer>
         </Flex>
       </Center>
-      {/* <Center>
-        <Flex w='70%' pos="relative" bottom="-10">
-          <Flex layerStyle='primary'>
-            borrowing market stats
-            Borrow APR :
-            Average LTV :
-            Average borrow per adress :
-          </Flex>
-          <Spacer />
-          <Flex layerStyle='primary'>
-          
-            reserve stats
-            Deposit APR :
-            USDi in Circulation :
-            USDC in Reserve :
-            Reserve Ratio :
-            Average deposits :
-            <Center position='relative' bottom='0px'>
-              <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>           
-              <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > 1,450 USDl</Text>
-            </Center>
-          </Flex>
-        </Flex>
-      </Center> */}
     </>
   )
 }

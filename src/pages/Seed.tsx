@@ -22,6 +22,8 @@ import { Text } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { ethers } from 'ethers';
+import "@fontsource/montserrat";
+
 
 
 export default function Seed() {

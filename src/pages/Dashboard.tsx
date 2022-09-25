@@ -54,6 +54,7 @@ import { useMoralisQuery } from 'react-moralis';
 import { useDisclosure } from '@chakra-ui/react';
 import { stringify } from 'querystring';
 import Moralis from 'moralis/types';
+import "@fontsource/montserrat";
 
 
 export default function Markets() {
@@ -392,7 +393,6 @@ export default function Markets() {
         boxShadow='dark-lg'
         borderColor='blackAlpha.500'
         bg={boxColorPrimary}
-        color='#EEEEEE'
         fontFamily='Montserrat'
       >
         <Table variant='simple' color='#EEEEEE'>
