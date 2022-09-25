@@ -29,7 +29,7 @@ const layerStyles = {
   secondary: {
     boxShadow: 'dark-lg',
     h: "150px",
-    bg: '#00ADB5',
+    bg: 'cyan.700', //cyan.600
     w: "80%",
     color: 'black',
     borderWidth: '1px',
@@ -48,7 +48,7 @@ const layerStyles = {
   },
   data: {
     boxShadow:'dark-lg',
-    bg:'#00ADB5',
+    bg:'cyan.700', //cyan.600
     borderWidth:'1px',
     borderRadius:'3xl',
     borderColor:'blackAlpha.500',

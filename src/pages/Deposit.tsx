@@ -26,6 +26,8 @@ import { useRef } from 'react';
 import abiUSDI from '#modules/AbiUSDI';
 import { useMoralis } from 'react-moralis';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import "@fontsource/open-sans"; 
+import "@fontsource/montserrat";
 
 
 export default function Deposit() {
@@ -217,7 +219,7 @@ export default function Deposit() {
   return (
     <div>
       <Center>
-        <Flex w='90%' flexDirection='row' h='auto'
+        <Flex w='90%  ' flexDirection='row' h='auto'
           borderWidth='2px'
           borderRadius='3xl'
           p='6'
@@ -229,7 +231,7 @@ export default function Deposit() {
         >
           <Flex layerStyle='data'>
             <Center >
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Current yield </Heading>
+              <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Current yield </Heading>
             </Center>
             <Center textStyle='data'>
               {(interestFactor/10**16).toFixed(2)} %
@@ -238,16 +240,16 @@ export default function Deposit() {
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USDI supply </Heading>
+              <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > Total USDL supply </Heading>
             </Center>
             <Center textStyle='data'>
-              {(totalSupply / 10 ** 18).toFixed(2)}  USDI
+              {(totalSupply / 10 ** 18).toFixed(2)}  USDL
             </Center>
           </Flex>
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > USDC in reserve </Heading></Center>
+              <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > USDC in reserve </Heading></Center>
             <Center textStyle='data'>
               {(usdcReserve / 10 ** 6).toFixed(2)} USDC
             </Center>
@@ -255,7 +257,7 @@ export default function Deposit() {
           <Spacer />
           <Flex layerStyle='data'>
             <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Reserve Ratio </Heading>
+              <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > Reserve Ratio </Heading>
             </Center>
             <Center textStyle='data'> {(reserveRatio / 10 ** 16).toFixed(2)} %</Center>
           </Flex>
@@ -268,17 +270,17 @@ export default function Deposit() {
           <Flex layerStyle='primary'>
             <Center>
               <Flex layerStyle='secondary'>
-                <Center position='relative' top='-6px'>
-                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your USDC Wallet Balance </Heading>
+                <Center position='relative' top='0px'>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Your USDC Wallet Balance </Heading>
                 </Center>
-                <Center position='relative' top='-6px'>
+                <Center position='relative' top='0px'>
                   <Text textStyle='data'> {(usdcBalance / 10 ** 6).toFixed(2)} USDC </Text>
                 </Center>
-                <Center position='relative' top='10px'>
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your USDL Wallet Balance </Heading>
+                <Center position='relative' top='5px'>
+                  <Heading  size='lg' fontFamily='Montserrat' fontWeight='bold' > Your USDL Wallet Balance </Heading>
                 </Center>
-                <Center position='relative' top='10px'>
-                  <Text textStyle='dataSmall' > {(usdiBalance / 10 ** 18).toFixed(2)} USDL</Text>
+                <Center position='relative' top='5px'>
+                  <Text textStyle='data'> {(usdiBalance / 10 ** 18).toFixed(2)} USDL</Text>
                 </Center>
               </Flex>
             </Center>
@@ -292,7 +294,7 @@ export default function Deposit() {
                   borderColor='grey'
                   borderWidth='2px'
                   fontWeight="300"
-                  fontFamily='Merienda One'
+                  fontFamily='Montserrat'
                   w='70%'
                   borderRadius="30"
                   color='white'
@@ -321,9 +323,9 @@ export default function Deposit() {
                 >
                   <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />   {/* Hue rotate format??? backdropHueRotate='XXX' */}
                   <AlertDialogContent bg='#393E46' borderRadius='20px' w='2000px'>
-                    <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm deposit</AlertDialogHeader>
+                    <AlertDialogHeader fontFamily='Montserrat' color='#EEEEEE' fontWeight='100'>Confirm deposit</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
+                    <AlertDialogBody fontFamily='Montserrat' color='#EEEEEE' fontWeight='500' fontSize='lg'>
                       <Center> <Text>are you sure you want to deposit {number} USDC ? </Text> </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
@@ -362,9 +364,9 @@ export default function Deposit() {
                 >
                   <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />   {/* Hue rotate format??? backdropHueRotate='XXX' */}
                   <AlertDialogContent bg='#393E46' borderRadius='20px' w='2000px'>
-                    <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm withdraw</AlertDialogHeader>
+                    <AlertDialogHeader fontFamily='Montserrat' color='#EEEEEE' fontWeight='100'>Confirm withdraw</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
+                    <AlertDialogBody fontFamily='Montserrat' color='#EEEEEE' fontWeight='500' fontSize='lg'>
                       <Center> <Text>are you sure you want to withdraw {number} USDC ? </Text> </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>

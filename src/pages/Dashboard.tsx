@@ -1,3 +1,5 @@
+import "@fontsource/open-sans";
+import "@fontsource/montserrat";
 import React, { useEffect, useRef } from 'react';
 import { useMoralis } from "react-moralis";
 import { useApiContract } from 'react-moralis';
@@ -292,7 +294,7 @@ export default function Markets() {
     });
 
   // UPDATES OF DASHBOARD DATA
-  
+
   useEffect(() => {
     if (isAuthenticated) {
       if (user) {
@@ -391,19 +393,19 @@ export default function Markets() {
         borderColor='blackAlpha.500'
         bg={boxColorPrimary}
         color='#EEEEEE'
-        fontFamily='Merienda One'
+        fontFamily='Montserrat'
       >
         <Table variant='simple' color='#EEEEEE'>
           <Thead>
-            <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'> Your deposited Assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value deposited</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value deposited in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Loan-To-Value</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Borrowing power</Th>
+            <Tr >
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> Your deposited Assets</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Value deposited</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Value deposited in $</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Loan-To-Value</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Borrowing power</Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light' >
             <Tr>
               <Td>Wrapped Fantom WFTM</Td>
               <Td>{(wethBalance / 10 ** 18).toFixed(4)} WFTM</Td>
@@ -442,14 +444,14 @@ export default function Markets() {
           </Tbody>
           <Thead>
             <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Borrowed assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value Borrowed</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value Borrowed in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Interest rate</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Borrowing power used </Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Borrowed assets</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Value Borrowed</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Value Borrowed in $</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Interest rate</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Borrowing power used </Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
             <Tr>
               <Td>Libor Protocol Stablecoin USDL</Td>
               <Td>{vaultLiability / 10 ** 18} USDL</Td>
@@ -460,28 +462,28 @@ export default function Markets() {
           </Tbody>
         </Table>
         <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
-          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
+          <ProgressLabel fontSize='lg' fontFamily='Montserrat' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
         </Progress>
       </TableContainer>
 
       <Center>
         <Flex w='70%' pos="relative" bottom="-10">
           <TableContainer layerStyle='primaryData'>
-            <Table variant='simple' color='#EEEEEE'>
+            <Table variant='simple' color='#EEEEEE' >
               <Thead>
                 <Tr>
-                  <Th color='#00EAFF' fontFamily='Merienda One'>borrowing market stats</Th>
-                  <Th color='#00EAFF' fontFamily='Merienda One'></Th>
+                  <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> borrowing market stats</Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
-              <Tbody >
+              <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'  >
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Current borrow APR :</Td>
-                  <Td textStyle='dataSmall'> 2.5%</Td>
+                  <Td> Current borrow APR :</Td>
+                  <Td> 2.5%</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Target borrow APR :</Td>
-                  <Td textStyle='dataSmall'> 1%</Td>
+                  <Td> Target borrow APR :</Td>
+                  <Td> 1%</Td>
                 </Tr>
               </Tbody>
             </Table>
@@ -491,30 +493,30 @@ export default function Markets() {
             <Table variant='simple' color='#EEEEEE'>
               <Thead>
                 <Tr>
-                  <Th color='#00EAFF' fontFamily='Merienda One'>Reserve Stats</Th>
-                  <Th color='#00EAFF' fontFamily='Merienda One'></Th>
+                  <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Reserve Stats</Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
-              <Tbody>
+              <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light' >
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Current Deposit APR :</Td>
-                  <Td textStyle='dataSmall'> 2.5%</Td>
+                  <Td> Current Deposit APR :</Td>
+                  <Td> 2.5%</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Target Deposit APR :</Td>
-                  <Td textStyle='dataSmall'> 2.5%</Td>
+                  <Td> Target Deposit APR :</Td>
+                  <Td> 2.5%</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> USDi in Circulation :</Td>
-                  <Td textStyle='dataSmall'> {(totalSupply / 10 ** 18).toFixed(2)} </Td>
+                  <Td> USDi in Circulation :</Td>
+                  <Td> {(totalSupply / 10 ** 18).toFixed(2)} </Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> USDC in Reserve :</Td>
-                  <Td textStyle='dataSmall'> {(UsdcReserve / 10 ** 6).toFixed(2)}$</Td>
+                  <Td> USDC in Reserve :</Td>
+                  <Td> {(UsdcReserve / 10 ** 6).toFixed(2)}$</Td>
                 </Tr>
                 <Tr>
-                  <Td fontFamily='Merienda One' fontWeight='900'> Reserve Ratio :</Td>
-                  <Td textStyle='dataSmall'> {(UsdcReserve * 10 ** 12 / totalSupply * 100).toFixed(2)}%</Td>
+                  <Td> Reserve Ratio :</Td>
+                  <Td> {(UsdcReserve * 10 ** 12 / totalSupply * 100).toFixed(2)}%</Td>
                 </Tr>
               </Tbody>
             </Table>
@@ -539,7 +541,6 @@ Curve: '0x1F770CCda0Ebaa907B9d2B17E6d318A9F036DB8e',
 ThreeLines: '0xbC86805A40C49a77eDaa81b06F1D0495cfa85Ed0',
 Oracle: '0x5A7E5b0b4FB20D5D9647b1615d85ec05cD1474a0',
 WethOracle: '0x5FFC0FEEE03ddBAAF8122c541bb02a716475043c' */
-
 
 /* FTM MAINNET
  */

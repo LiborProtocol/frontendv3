@@ -23,6 +23,8 @@ import { Center, Spacer, Flex } from '@chakra-ui/react';
 import { NumberInput, InputGroup, InputRightElement, NumberInputField } from '@chakra-ui/react';
 import { Box, Heading, position } from '@chakra-ui/react';
 import { useState } from 'react';
+import "@fontsource/montserrat";
+
 import {
   Menu,
   MenuButton,
@@ -227,7 +229,7 @@ export default function Borrow() {
   const getVaultID
     = useApiContract({
       abi: abiVaultController,
-      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      address: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "vaultIDs",
       params: {
         wallet: userAccount,
@@ -238,7 +240,7 @@ export default function Borrow() {
   const getVaultAddress
     = useApiContract({
       abi: abiVaultController,
-      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      address: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "vaultAddress",
       params: {
         id: ID[0],
@@ -252,7 +254,7 @@ export default function Borrow() {
       address: vaultAddress,
       functionName: "tokenBalance",
       params: {
-        addr: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
+        addr: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'
       },
       chain: 'goerli',
     });
@@ -260,7 +262,7 @@ export default function Borrow() {
   const getVaultBorrowingPower
     = useApiContract({
       abi: abiVaultController,
-      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      address: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "vaultBorrowingPower",
       params: {
         id: ID[0],
@@ -271,7 +273,7 @@ export default function Borrow() {
   const getVaultLiability
     = useApiContract({
       abi: abiVaultController,
-      address: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      address: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "vaultLiability",
       params: {
         id: ID[0],
@@ -282,7 +284,7 @@ export default function Borrow() {
   const getUserTokenBalance
     = useApiContract({
       abi: abiIERC20,
-      address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+      address: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
       functionName: "balanceOf",
       params: {
         account: userAccount,
@@ -303,14 +305,14 @@ export default function Borrow() {
 
   /* PRICE API CALLS */
 
-  const getEthPrice = useTokenPrice({ address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", chain: "eth" });
+  const getEthPrice = useTokenPrice({ address: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83", chain: "fantom" });
 
   /* WEB3 TRANSACTIONS */
 
   const mintVault
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
-      contractAddress: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      contractAddress: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "mintVault",
       params: {},
     });
@@ -318,7 +320,7 @@ export default function Borrow() {
   const doTransfer
     = useWeb3ExecuteFunction({
       abi: abiIERC20,
-      contractAddress: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+      contractAddress: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
       functionName: "transfer",
       params: {
         recipient: vaultAddress,
@@ -329,7 +331,7 @@ export default function Borrow() {
   const doBorrow
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
-      contractAddress: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      contractAddress: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "borrowUsdi",
       params: {
         id: ID[0],
@@ -343,7 +345,7 @@ export default function Borrow() {
       contractAddress: vaultAddress,
       functionName: "withdrawErc20",
       params: {
-        token_address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+        token_address: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
         amount: ethers.utils.parseUnits(number1 || '0', "ether"),
       },
     });
@@ -351,7 +353,7 @@ export default function Borrow() {
   const doRepay
     = useWeb3ExecuteFunction({
       abi: abiVaultController,
-      contractAddress: '0x4B586a04886bf4ba0875eE6546Ff9447f6947ffA',
+      contractAddress: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
       functionName: "repayUSDi",
       params: {
         id: ID[0],
@@ -378,7 +380,7 @@ export default function Borrow() {
 
   return (
     <div>
-      {/* <TableContainer
+      <TableContainer
         borderWidth='2px'
         borderRadius='3xl'
         p='4'
@@ -388,18 +390,17 @@ export default function Borrow() {
         borderColor='blackAlpha.500'
         bg={boxColorPrimary}
         color='#EEEEEE'
-        fontFamily='Merienda One'
       >
-        <Table variant='simple' color='#EEEEEE'>
+        <Table variant='simple' color='#EEEEEE'  textStyle='tableHeader'>
           <Thead>
             <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'> Your deposited Assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value deposited</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value deposited in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Loan-To-Value</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> Your deposited Assets</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> Your Value deposited</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> Your Value deposited in $</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}> Loan-To-Value</Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
             <Tr>
               <Td>SOON !</Td>
               <Td>SOON !</Td>
@@ -421,13 +422,13 @@ export default function Borrow() {
           </Tbody>
           <Thead>
             <Tr>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Borrowed assets</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value Borrowed</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Your Value Borrowed in $</Th>
-              <Th color='#00EAFF' fontFamily='Merienda One'>Borrowing power used </Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Borrowed assets</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Value Borrowed</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Your Value Borrowed in $</Th>
+              <Th color='cyan.600' fontFamily='Montserrat' fontSize={'md'}>Borrowing power used </Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
             <Tr>
               <Td>Libor Protocol Stablecoin USDL</Td>
               <Td> {vaultLiability / 10 ** 18} USDL</Td>
@@ -437,49 +438,40 @@ export default function Borrow() {
           </Tbody>
         </Table>
         <Progress isAnimated hasStripe value={vaultLiability / vaultBorrowingPower * 100} height='15px' colorScheme='red' bg='green.400' borderRadius='10' top='7px' >
-          <ProgressLabel fontSize='lg' fontFamily='Merienda One' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
+          <ProgressLabel fontSize='lg' fontFamily='Montserrat' >{(vaultLiability / vaultBorrowingPower * 100).toFixed(2)}%</ProgressLabel>
         </Progress>
-      </TableContainer> */}
-
+      </TableContainer> 
+  
       <Center>
         <Flex w='70%' pos="relative" bottom="-10">
           <Flex layerStyle='primary'>
             <Center>
               <Flex layerStyle='secondary'>
                 <Center position='relative' top='-6px'>
-                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Select your asset</Heading>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Select your asset</Heading>
                 </Center>
-
                 <Center>
                   <Menu>
-
-                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} color='black' pos='relative' top='0px' bg='#EEEEEE' fontSize='lg' fontFamily='Merienda One' w='100%' >
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} color='black' pos='relative' top='0px' bg='#EEEEEE' fontSize='lg' fontFamily='Montserrat' w='100%' >
                       {assetDeposit}
                     </MenuButton>
-
-
                     <Center>
-                      <MenuList  bg='#00ADB5' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Merienda One' borderRadius='20' >
-
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WFTM')} bg='#00ADB5' borderRadius='20' >WFTM</MenuItem>
+                      <MenuList  bg='cyan.700' justifyContent={'center'} w='187%' borderColor='black' fontSize='lg' fontFamily='Montserrat' borderRadius='20'>
+                        <MenuItem justifyContent={'center'} _focus={ { bg: "charcoal.500" } } onClick={() => setAssetDeposit('WFTM')} borderRadius='20' >WFTM</MenuItem>
                         <MenuDivider />
-
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')}  bg='#00ADB5' >WETH</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WETH')}>WETH</MenuItem>
                         <MenuDivider />
-
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')}  bg='#00ADB5' >WBTC</MenuItem>
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('WBTC')}>WBTC</MenuItem>
                         <MenuDivider />
-
-                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')}  bg='#00ADB5' borderRadius='20'>XBOO</MenuItem>
-
+                        <MenuItem justifyContent={'center'} onClick={() => setAssetDeposit('XBOO')} borderRadius='20'>XBOO</MenuItem>
                       </MenuList>
                     </Center>
                   </Menu>
                 </Center>
                 <Center position='relative' top='10px' >
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
+                  <Heading size='md' fontFamily='Montserrat' fontWeight='bold' > Your wallet balance </Heading>
                 </Center>
-                <Center position='relative' top='10px' textStyle='dataSmall'>
+                <Center position='relative' top='10px' textStyle='data'>
                   {(userTokenBalance / 10 ** 18).toFixed(5)} {assetDeposit}
                 </Center>
               </Flex>
@@ -492,7 +484,7 @@ export default function Borrow() {
                   borderColor='grey'
                   borderWidth='2px'
                   fontWeight="300"
-                  fontFamily='Merienda One'
+                  fontFamily='Montserrat'
                   w='70%'
                   borderRadius="30"
                   color='white'
@@ -521,9 +513,9 @@ export default function Borrow() {
                 >
                   <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />
                   <AlertDialogContent bg={boxColorPrimary} borderRadius='20px' w='2000px'>
-                    <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm Deposit</AlertDialogHeader>
+                    <AlertDialogHeader fontFamily='Montserrat' color='#EEEEEE' fontWeight='100'>Confirm Deposit</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
+                    <AlertDialogBody fontFamily='Montserrat' color='#EEEEEE' fontWeight='500' fontSize='lg'>
                       <Center> <Text>are you sure you want to deposit {number1} WETH ? </Text> </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
@@ -568,9 +560,9 @@ export default function Borrow() {
                 >
                   <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />   {/* Hue rotate format??? backdropHueRotate='XXX' */}
                   <AlertDialogContent bg={boxColorPrimary} borderRadius='20px' w='2000px'>
-                    <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm Withdraw</AlertDialogHeader>
+                    <AlertDialogHeader fontFamily='Montserrat' color='#EEEEEE' fontWeight='100'>Confirm Withdraw</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
+                    <AlertDialogBody fontFamily='Montserrat' color='#EEEEEE' fontWeight='500' fontSize='lg'>
                       <Center> <Text>are you sure you want to withdraw {number1} WETH ? </Text> </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
@@ -580,14 +572,12 @@ export default function Borrow() {
                         </Button>
                         <Spacer />
                         <Button bgColor='green.500' w='12' onClick={async () => {
-
                           if (isAuthenticated && (ID.length > 0)) {
                             await (await doWithdraw.fetch() as unknown as TransactionResponse).wait();
                             fetchActiveTokenBalance();
                             ActionDown1.onClose();
                           }
                         }
-
                         } >
                           Yes
                         </Button>
@@ -600,63 +590,25 @@ export default function Borrow() {
           </Flex>
           <Spacer />
           <Flex
-            borderWidth='2px'
-            borderRadius='3xl'
-            p='4'
-            flexDirection='column'
-            justifyContent='space-between'
-            boxShadow='dark-lg'
-            borderColor='blackAlpha.500'
-            bg={boxColorPrimary}
-            color='#EEEEEE'
-            h="450px"
-            w="45%"
-
+            layerStyle='primary'
           >
             <Center>
               <Flex
-                boxShadow='dark-lg'
-                h="150px"
-                bg={boxColorSecondary}
-                w="80%"
-                color='black'
-                borderWidth='1px'
-                borderRadius='3xl'
-                borderColor='blackAlpha.500'
-                p='4'
-                position='relative'
-                top='60px'
-                flexDirection='column'
-                justifyContent='center'
+layerStyle='secondary'
               >
 
-                <Center position='relative' top='-6px'>
-                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your borrowed amount </Heading>
+                <Center position='relative' top='0px'>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold'> Your borrowed amount </Heading>
                 </Center>
-                <Center position='relative' top='-6px'>
-                  <Text fontSize='3xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > {(vaultLiability / 10 ** 18).toFixed(5)} $</Text>
+                <Center position='relative' top='0px'>
+                  <Text textStyle='data' > {(vaultLiability / 10 ** 18).toFixed(5)} $</Text>
+                </Center> 
+                <Center position='relative' top='5px'>
+                  <Heading size='lg' fontFamily='Montserrat' fontWeight='bold' > Your Wallet Balance </Heading>
                 </Center>
-
-                <Center position='relative' top='10px'>
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your Wallet Balance </Heading>
+                <Center position='relative' top='5px'>
+                  <Text textStyle='data'> {(tokenBalance / 10 ** 18).toFixed(5)} USDL </Text>
                 </Center>
-                <Center position='relative' top='10px'>
-                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900'> {(tokenBalance / 10 ** 18).toFixed(5)} USDL </Text>
-                </Center>
-
-                {/*   <Center position='relative' top='-2px'>
-                  <Heading size='xl' fontFamily='Oleo Script' fontWeight='500' > Your borrowed amount </Heading>
-                </Center>
-                <Center position='relative' top='-4px'>
-                  <Text fontSize='3xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > 10350 $</Text>
-                </Center>
-
-                <Center position='relative' top='6px'>
-                  <Heading size='lg' fontFamily='Oleo Script' fontWeight='500' > Your Wallet Balance </Heading>
-                </Center>
-                <Center position='relative' top='4px'>
-                  <Text fontSize='2xl' fontFamily='Leckerli One' color='#EEEEEE' textShadow='3px 3px #000000' fontWeight='900' > 1450 $</Text>
-                </Center> */}
 
               </Flex>
 
@@ -668,7 +620,7 @@ export default function Borrow() {
                   borderColor='grey'
                   borderWidth='2px'
                   fontWeight="300"
-                  fontFamily='Merienda One'
+                  fontFamily='Montserrat'
                   w='70%'
                   borderRadius="30"
                   color='white'
@@ -684,27 +636,9 @@ export default function Borrow() {
 
             <Center>
               <Flex w='80%' >
-                <Button onClick={ActionUp2.onOpen} w='40%' pos='relative' bottom='20px' color='black' bg='green.600' h='50px'
-                  borderWidth='1px'
-                  borderRadius='2xl'
-                  borderColor='blackAlpha.500'
-                  p='4'
-                  boxShadow='dark-lg'
-                  fontFamily='Merienda One'
-                  fontSize='3xl'
-                  fontWeight='100'
-                > Borrow</Button>
+                <Button onClick={ActionUp2.onOpen} variant='greenButton'> Borrow</Button>
                 <Spacer />
-                <Button onClick={ActionDown2.onOpen} w='40%' pos='relative' bottom='20px' color='black' bg='red.600' h='50px'
-                  borderWidth='1px'
-                  borderRadius='2xl'
-                  borderColor='blackAlpha.500'
-                  p='4'
-                  boxShadow='dark-lg'
-                  fontFamily='Merienda One'
-                  fontSize='3xl'
-                  fontWeight='100'
-                > Repay</Button>
+                <Button onClick={ActionDown2.onOpen} variant='redButton'> Repay</Button>
 
                 <AlertDialog
                   motionPreset='slideInBottom'
@@ -715,10 +649,10 @@ export default function Borrow() {
                 >
                   <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />
                   <AlertDialogContent bg={boxColorPrimary} borderRadius='20px' w='2000px'>
-                    <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm Borrow</AlertDialogHeader>
+                    <AlertDialogHeader fontFamily='Montserrat' color='#EEEEEE' fontWeight='100'>Confirm Borrow</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
-                      <Center> <Text>are you sure you want to borrow {number2} USDI ? </Text> </Center>
+                    <AlertDialogBody fontFamily='Montserrat' color='#EEEEEE' fontWeight='500' fontSize='lg'>
+                      <Center> <Text>are you sure you want to borrow {number2} USDL ? </Text> </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
                       <Flex gap='2'>
@@ -726,11 +660,10 @@ export default function Borrow() {
                           No
                         </Button>
                         <Spacer />
-                        <Button bgColor='green.500' w='12' onClick={async () => {
+                          <Button bgColor='green.500' w='12' onClick={async () => {
 
                           if (isAuthenticated && (ID.length > 0)) {
-                            doBorrow.fetch();
-                            /* await (await doBorrow.fetch() as unknown as TransactionResponse).wait(); */
+                            await (await doBorrow.fetch() as unknown as TransactionResponse).wait(); 
                             fetchActiveVaultLiability();
                             ActionUp2.onClose;
                           }
@@ -753,10 +686,10 @@ export default function Borrow() {
                 >
                   <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />   {/* Hue rotate format??? backdropHueRotate='XXX' */}
                   <AlertDialogContent bg={boxColorPrimary} borderRadius='20px' w='2000px'>
-                    <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm Repayment</AlertDialogHeader>
+                    <AlertDialogHeader fontFamily='Montserrat' color='#EEEEEE' fontWeight='100'>Confirm Repayment</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
-                      <Center> <Text>are you sure you want to repay {number2} USDI ? </Text> </Center>
+                    <AlertDialogBody fontFamily='Montserrat' color='#EEEEEE' fontWeight='500' fontSize='lg'>
+                      <Center> <Text>are you sure you want to repay {number2} USDL ? </Text> </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
                       <Flex gap='2'>
@@ -788,6 +721,8 @@ export default function Borrow() {
   )
 }
 
+/* GEORLI TESTNET
+ */
 
 /* 
 USDC_WETH_CL: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e',
@@ -802,3 +737,29 @@ ThreeLines: '0xB112408755314782a4519988284E646aF18641da',
 Oracle: '0xDD65D6FDD4A7ba6f4c9d70544032689bF618A2b3',
 WethOracle: '0x08B8b8dE291B5A88D18b4F754e29A1a8719bDfd4', */
 
+/* FTM MAINNET
+ */
+
+/* USDC_WETH_CL: '0x11ddd3d147e5b83d01cee7070027092397d63658',
+USDC_WETH_POOL: '0x11ddd3d147e5b83d01cee7070027092397d63658',
+USDC_WBTC_CL: '0x8e94c22142f4a64b99022ccdd994f4e9ec86e4b4',
+USDC_WBTC_POOL: '0x8e94c22142f4a64b99022ccdd994f4e9ec86e4b4',
+USDC_WFTM_CL: '0xf4766552d15ae4d256ad41b6cf2933482b0680dc',
+USDC_WFTM_POOL: '0xf4766552d15ae4d256ad41b6cf2933482b0680dc',
+USDC_XBOO_CL: '0xc8c80c17f05930876ba7c1dd50d9186213496376',
+USDC_XBOO_POOL: '0xc8c80c17f05930876ba7c1dd50d9186213496376',
+USDC: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75',
+WETH: '0x74b23882a30290451a17c44f4f05243b6b58c76d',
+WBTC: '0x321162cd933e2be498cd2267a90534a804051b11',
+WFTM: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+XBOO: '0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE',
+ProxyAdmin: '0x7196F37A4d2f6745F80da3cb727D636e40828DcC',
+VaultController: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
+USDI: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
+Curve: '0x1ecA0B0fd6B4356A4d947dD0D614e73A01d9Bf29',
+ThreeLines: '0x8161884FF27386800969D7025Ba9C397b68E720C',
+Oracle: '0xEFD28990607793077aa61C6a67F1E3B20dCCc70c',
+WethOracle: '0x646Ce0295a82a60D0e7CaD52E89aFD7F986aF54d',
+WbtcOracle: '0x48616AbF871E96e4854622ded97cA5D78b033fDB',
+WftmOracle: '0xFDa288eF53Dd1dCa3f5A548367174D591ea1B1c5',
+XbooOracle: '0xe57E99c57242d0d245eF7789432168108Cf79c79' */

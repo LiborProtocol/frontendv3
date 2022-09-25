@@ -3,9 +3,9 @@ const textStyles = {
     data: {
         
         fontSize: '3xl',
-        fontFamily: 'Leckerli One',
+        fontFamily: 'Montserrat',
         color: '#EEEEEE',
-        textShadow: '3px 3px #000000',
+        /* textShadow: '3px 3px #000000', */
         fontWeight: '900',
     },
     dataSmall: {
@@ -21,6 +21,13 @@ const textStyles = {
         size: 'lg',
         fontFamily: 'Merienda One',
         fontWeight: '900',
+
+    },
+    tableHeader: {
+
+        color: 'cyan.600',
+        fontFamily: 'Montserrat',
+        fontSize: 'md',
 
     },
 
