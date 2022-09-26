@@ -296,7 +296,7 @@ export default function Borrow() {
   const getUserUsdiBalance
     = useApiContract({
       abi: abiIERC20,
-      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+      address: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
       functionName: "balanceOf",
       params: {
         account: userAccount,

@@ -85,7 +85,6 @@ import '@fontsource/montserrat';
 export default function Ido() {
 
 
-  
     return (
       <Center py={6}>
         <Box
