@@ -73,284 +73,76 @@ import {
   MenuDivider,
 } from '@chakra-ui/react';
 import { ConnectButton } from '@web3uikit/web3';
+import {
+  Avatar,
+  Image,
+  Stack,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import '@fontsource/montserrat';
 
 
-
-export default function Seed() {
-
-  const ActionUp = useDisclosure()
-  const cancelRef = useRef<HTMLButtonElement>(null);
-
-  const userAccount = useMoralis().account;
-  const [number, setNumber] = useState("");
-
-  const [assetDeposit, setAssetDeposit] = useState("WETH");
-  const [assetAddress, setAssetAddress] = useState("0x326C977E6efc84E512bB9C30f76E30c160eD06FB");
+export default function Ido() {
 
 
-
-  useEffect(() => {
-
-    setTimeout(() => {
-
-      getBalanceOf.runContractFunction();
-      getUserParticipations.runContractFunction();
-      getMySeedTokens.runContractFunction();
-      getTotalDollarContributed.runContractFunction();
-      getEthPrice.fetchTokenPrice();
-    }
-
-      , 2000)
+  
+    return (
+      <Center py={6}>
+        <Box
+          maxW={'400px'}
+          w={'full'}
+          bg={useColorModeValue('#EEEEEE', 'gray.800')}
+          boxShadow={'2xl'}
+          rounded={'md'}
+          overflow={'hidden'}
+          position='relative'
+          top='10rem'
+          >
+          <Image
+            h={'180px'}
+            w={'full'}
+            src={
+              'https://images.unsplash.com/photo-1612865547334-09cb8cb455da?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
+            }
+            objectFit={'cover'}
+          />
+          <Flex justify={'center'} mt={'-110px'}>
+            <Avatar
+              size={'3xl'}
+              src={
+                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
+              }
+              css={{
+                border: '2px solid white',
+              }}
+            />
+          </Flex>
+          <Box p={8}>
+            <Stack spacing={2} align={'center'} mb={5}>
+              <Heading fontSize={'2xl'} fontWeight={900} fontFamily={'Montserrat'}>
+                GD
+              </Heading>
+              <Text fontSize={'2xl'} fontFamily='Montserrat'>Founder</Text>
+              <Text fontSize={'xl'} fontFamily='Montserrat'> Previously in banking. Keen to build the dezentralized future.</Text>
+            </Stack>
+  
+            <Button
+              w={'full'}
+              bg={useColorModeValue('#151f21', 'gray.900')}
+              color={'#EEEEEE'}
+              rounded={'lg'}
+              fontFamily='Montserrat'
+              fontSize={'2xl'}
+              _hover={{
+                transform: 'translateY(-2px)',
+                boxShadow: 'lg',
+              }}>
+              Follow
+            </Button>
+          </Box>
+        </Box>
+      </Center>
+    );
   }
-    , []);
 
 
-  const doApprove = useWeb3ExecuteFunction({
-    abi: abiIERC20,
-    contractAddress: assetAddress,
-    functionName: "approve",
-    params: { spender: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148', amount: ethers.utils.parseUnits(number || '0', "ether") },
-  });
-
-
-  const getBalanceOf
-    = useApiContract({
-      abi: abiIERC20,
-      address: assetAddress,
-      functionName: "balanceOf",
-      params: {
-        account: userAccount || '0x0',
-      },
-      chain: 'goerli',
-    });
-
-  const getUserParticipations
-    = useApiContract({
-      abi: abiSeedRound2,
-      address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
-      functionName: "getUserParticipations1",
-      params: {
-        _sender: userAccount || '0x0',
-      },
-      chain: 'goerli',
-    });
-
-  const getMySeedTokens
-    = useApiContract({
-      abi: abiSeedRound2,
-      address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
-      functionName: "getMySeedTokens",
-      params: {
-        _sender: userAccount || '0x0',
-      },
-      chain: 'goerli',
-    });
-
-  const getTotalDollarContributed
-    = useApiContract({
-      abi: abiSeedRound2,
-      address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
-      functionName: "getTotalDollarContributed",
-      params: {},
-      chain: 'goerli',
-    });
-
-  const getEthPrice = useTokenPrice({ address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", chain: "eth" });
-
-  const getTotalBuys
-    = useApiContract({
-      abi: abiSeedRound,
-      address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
-      functionName: "getTotalBuys",
-      params: {
-      },
-      chain: 'goerli',
-    });
-
-  const getTotalUsers
-    = useApiContract({
-      abi: abiSeedRound,
-      address: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
-      functionName: "getTotalUsers",
-      params: {
-      },
-      chain: 'goerli',
-    });
-
-
-  const doDeposit = useWeb3ExecuteFunction()
-
-
-  console.log(getTotalDollarContributed.data)
-  console.log(getUserParticipations.data)
-  console.log(getMySeedTokens.data)
-  console.log(getEthPrice.data?.usdPrice)
-  console.log(userAccount)
-
-
-  return (
-    <div>
-      <Center>
-        <Flex w='90%' flexDirection='row' h='auto'
-          borderWidth='2px'
-          borderRadius='3xl'
-          p='6'
-          boxShadow='dark-lg'
-          borderColor='blackAlpha.500'
-          bg='#393E46'
-          top='20px'
-          pos='relative'
-        >
-          <Flex layerStyle='data'>
-            <Center >
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Total USD raised</Heading>
-            </Center>
-            <Center textStyle='data'>
-              {(parseInt(getTotalDollarContributed.data || '0') / 10 ** 18).toFixed(2)} USD
-            </Center>
-          </Flex>
-          <Spacer />
-          <Flex layerStyle='data'>
-            <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current deposit </Heading>
-            </Center>
-            <Center textStyle='data'>
-              {(parseInt(getUserParticipations.data || '0') * 10 ** 18).toFixed(2)}  USD
-            </Center>
-          </Flex>
-          <Spacer />
-          <Flex layerStyle='data'>
-            <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Your current token allocation </Heading>
-            </Center>
-            <Center textStyle='data'> {(parseInt(getMySeedTokens.data || '0') / 10 ** 18).toFixed(0)} </Center>
-          </Flex>
-          <Spacer />
-          <Flex layerStyle='data'>
-            <Center>
-              <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > LIBOR token price</Heading></Center>
-            <Center textStyle='data'>
-              {/*   {parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * parseInt(getTotalDollarContributed.data) / 10 ** 18 / (3 * 10 ** 9)}$ */}
-              0.0012$
-            </Center>
-          </Flex>
-        </Flex>
-      </Center>
-
-      <Center>
-        <Flex layerStyle='background' justifyContent='center' top='110px'>
-          <Flex layerStyle='primary'>
-            <Center>
-              <Flex layerStyle='secondary'>
-                <Center position='relative' top='-6px'>
-                  <Heading size='lg' fontFamily='Merienda One' fontWeight='900' > Select your asset</Heading>
-                </Center>
-                <Menu >
-                  <MenuButton as={Button} rightIcon={<ChevronDownIcon />} color='black' pos='relative' top='0px' bg='#EEEEEE'>
-                    {assetDeposit}
-                  </MenuButton>
-                  <Center>
-                    <MenuList bg='#EEEEEE'>
-                      <MenuItem onClick={() => {
-                        setAssetDeposit('BNB');
-                        setAssetAddress('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'); //
-                      }
-                      }  >BNB</MenuItem>
-                      <MenuItem onClick={() => {
-                        setAssetDeposit('WETH');
-                        setAssetAddress('0xD87Ba7A50B2E7E660f678A895E4B72E7CB4CCd9C');
-                      }
-                      }  >WETH</MenuItem>
-                      <MenuItem onClick={() => {
-                        setAssetDeposit('WBTC');
-                        setAssetAddress('0x326C977E6efc84E512bB9C30f76E30c160eD06FB');
-                      }
-                      }  >WBTC</MenuItem>
-                    </MenuList>
-                  </Center>
-                </Menu>
-                <Center position='relative' top='10px' >
-                  <Heading size='md' fontFamily='Merienda One' fontWeight='900' > Your wallet balance </Heading>
-                </Center>
-                <Center position='relative' top='10px' textStyle='dataSmall'>
-                  {(parseInt(getBalanceOf.data || '0') / 10 ** 18).toFixed(2)}
-                  {userAccount} USDIl
-                </Center>
-              </Flex>
-            </Center>
-
-            <NumberInput variant='NumberInputField' value={number} onChange={value => setNumber(value)}>
-              <Center>
-                <NumberInputField
-                  borderColor='grey'
-                  borderWidth='2px'
-                  fontWeight="300"
-                  fontFamily='Merienda One'
-                  w='70%'
-                  borderRadius="30"
-                  color='white'
-                  placeholder='Enter your desired amount'
-                  _placeholder={{ opacity: 1, color: 'white', textAlign: 'center' }}
-                  textAlign='center'
-                  top='30'
-                  bg='gray.600' />
-              </Center>
-            </NumberInput>
-
-            <Center>
-
-
-              <Button onClick={ActionUp.onOpen} variant='greenButton' w='50%'> Deposit</Button>
-
-              <AlertDialog
-                motionPreset='slideInBottom'
-                leastDestructiveRef={cancelRef}
-                onClose={ActionUp.onClose}
-                isOpen={ActionUp.isOpen}
-                isCentered
-              >
-                <AlertDialogOverlay backdropFilter="auto" backdropBlur="10px" bg='blackAlpha.500' />
-                <AlertDialogContent bg='#393E46' borderRadius='20px' w='2000px'>
-                  <AlertDialogHeader fontFamily='Merienda One' color='#EEEEEE' fontWeight='100'>Confirm Deposit</AlertDialogHeader>
-                  <AlertDialogCloseButton />
-                  <AlertDialogBody fontFamily='Merienda One' color='#EEEEEE' fontWeight='500' fontSize='lg'>
-                    <Center> <Text>are you sure you want to deposit {number} USD ? </Text> </Center>
-                  </AlertDialogBody>
-                  <AlertDialogFooter>
-                    <Flex gap='2'>
-                      <Button ref={cancelRef} onClick={ActionUp.onClose} bgColor='red.500' w='12'>
-                        No
-                      </Button>
-                      <Spacer />
-                      <Button bgColor='green.500' w='12'
-                        onClick={() => {
-                          doDeposit.fetch({
-                            params: {
-                              abi: abiSeedRound2,
-                              contractAddress: '0x30dDDFAB8F17106DdB5d700330015Ae99BEeE148',
-                              functionName: "Participate",
-                              params: {
-                                _tokenAddress: assetAddress,
-                                _tokenAmount: ethers.utils.parseUnits(number || '0', "ether"),
-                              },
-
-                            }
-                          });
-                          doApprove.fetch();
-                        }}
-
-                        disabled={doDeposit.isFetching}
-                      >
-                        Yes
-                      </Button>
-                    </Flex>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </Center>
-          </Flex>
-        </Flex>
-      </Center>
-    </div>
-  )
-}

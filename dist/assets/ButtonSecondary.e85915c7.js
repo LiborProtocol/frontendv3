@@ -1,4 +1,4 @@
-import{aq as e,ap as o,ar as a,as as l}from"./index.3f80b456.js";const r=e(l)`
+import{av as e,au as o,aw as a,ax as l}from"./index.616676ff.js";const r=e(l)`
     background-color: ${o.blueLight};
     border-color: ${o.blueLight};
     color: ${o.blue};
@@ -14,4 +14,4 @@ import{aq as e,ap as o,ar as a,as as l}from"./index.3f80b456.js";const r=e(l)`
     svg {
         fill: ${o.blue};
     }
-`;var s={ButtonSecondaryStyled:r};const{ButtonSecondaryStyled:c}=s,u=({...t})=>a(c,{...t});export{u as default};
+`;var s={ButtonSecondaryStyled:r};const{ButtonSecondaryStyled:c}=s,n=({...t})=>a(c,{...t});export{n as default};
