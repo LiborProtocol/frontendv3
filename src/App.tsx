@@ -25,8 +25,8 @@ function App() {
   return (
     
     <MoralisProvider 
-    appId="9VRStGf1bPYNwHrkfHw7guyFC1Dtt0Hs6zjyBKsB"
-    serverUrl="https://nuhutny6ps6a.usemoralis.com:2053/server"
+    appId="UQavDN7gR438DjmQf1V6FhqpaqUtZk2h8Uux37RH"
+    serverUrl="https://9jofns106tkh.usemoralis.com:2053/server"
   >
     <QueryClientProvider client={queryClient}>
       

@@ -54,6 +54,7 @@ import { stringify } from 'querystring';
 import Moralis from 'moralis/types';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { isInteger, isNumber } from 'lodash';
+import abiUSDI from '#modules/AbiUSDI';
 
 
 export default function Borrow() {
@@ -195,10 +196,10 @@ export default function Borrow() {
 
   useEffect(
     () => {
-      if (ID.length > 0) {
+      if (userAccount) {
         fetchActiveUserTokenBalance();
       }
-    }, [ID]
+    }, [userAccount]
   )
 
   useEffect(
@@ -235,7 +236,7 @@ export default function Borrow() {
       params: {
         wallet: userAccount,
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getVaultAddress
@@ -246,7 +247,7 @@ export default function Borrow() {
       params: {
         id: ID[0],
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getTokenBalance
@@ -257,7 +258,7 @@ export default function Borrow() {
       params: {
         addr: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getVaultBorrowingPower
@@ -268,7 +269,7 @@ export default function Borrow() {
       params: {
         id: ID[0],
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getVaultLiability
@@ -279,7 +280,7 @@ export default function Borrow() {
       params: {
         id: ID[0],
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getUserTokenBalance
@@ -290,18 +291,18 @@ export default function Borrow() {
       params: {
         account: userAccount,
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getUserUsdiBalance
     = useApiContract({
-      abi: abiIERC20,
+      abi: abiUSDI,
       address: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
       functionName: "balanceOf",
       params: {
         account: userAccount,
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   /* PRICE API CALLS */
@@ -367,14 +368,8 @@ export default function Borrow() {
   console.log(isAuthenticated)
   console.log(userAccount)
   console.log(ID)
-  console.log(ID.length)
-  console.log(getVaultID.data)
-  console.log(getVaultAddress.data)
-  console.log(getUserTokenBalance.data)
-  console.log(vaultAddress)
   console.log(tokenBalance)
-  console.log(vaultLiability)
-  console.log(vaultBorrowingPower)
+  console.log(JSON.stringify(getEthPrice.data?.usdPrice, null, 2))
   console.log('END')
 
 
@@ -403,16 +398,16 @@ export default function Borrow() {
           </Thead>
           <Tbody fontFamily='Montserrat' fontSize={'xl'} fontWeight='light'>
             <Tr>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
-              <Td>SOON !</Td>
+              <Td>Wrapped Fantom</Td>
+              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WFTM</Td>
+              <Td>{(parseFloat(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
+              <Td>85%</Td>
             </Tr>
             <Tr>
-              <Td>Wrapped Ethereum WETH</Td>
-              <Td>{(tokenBalance / 10 ** 18).toFixed(4)} WETH</Td>
-              <Td>{(parseInt(JSON.stringify(getEthPrice.data?.usdPrice, null, 2)) * tokenBalance / 10 ** 18).toFixed(2)}$</Td>
-              <Td>85%</Td>
+              <Td>SOON !</Td>
+              <Td>SOON !</Td>
+              <Td>SOON !</Td>
+              <Td>SOON !</Td>
             </Tr>
             <Tr>
               <Td>SOON !</Td>
@@ -600,7 +595,6 @@ export default function Borrow() {
               <Flex
                 layerStyle='secondary'
               >
-
                 <Center position='relative' top='0px'>
                   <Heading size='lg' fontFamily='Montserrat' fontWeight='bold'> Your borrowed amount </Heading>
                 </Center>
@@ -613,9 +607,7 @@ export default function Borrow() {
                 <Center position='relative' top='5px'>
                   <Text textStyle='data'> {(tokenBalance / 10 ** 18).toFixed(5)} USDL </Text>
                 </Center>
-
               </Flex>
-
             </Center>
 
             <NumberInput value={number2} onChange={value => 

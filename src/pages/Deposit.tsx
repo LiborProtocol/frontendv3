@@ -71,73 +71,70 @@ export default function Deposit() {
     await getInterestFactor.runContractFunction();
   }
 
-
-
   /* MORALIS API CALLS */
 
   const getInterestFactor
     = useApiContract({
       abi: abiCurve,
-      address: '0x1F770CCda0Ebaa907B9d2B17E6d318A9F036DB8e',
+      address: '0x1ecA0B0fd6B4356A4d947dD0D614e73A01d9Bf29',
       functionName: "getValueAt",
       params: {
         curve_address: '0x0000000000000000000000000000000000000000',
         x_value: ethers.utils.parseUnits(reserveRatio.toString(), "wei"),
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getReserveRatio
     = useApiContract({
       abi: abiUSDI,
-      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+      address: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
       functionName: "reserveRatio",
       params: {
       },
-      chain: 'goerli',
+      chain: 'fantom',
     });
-
 
   const getTotalSupply
     = useApiContract({
       abi: abiUSDI,
-      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+      address: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
       functionName: "_totalSupply",
       params: {},
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getUsdcReserve
     = useApiContract({
       abi: abiIERC20,
-      address: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      address: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75',
       functionName: "balanceOf",
-      params: { account: '0x43120a1c70A06b194eaB354d32089f630c43A4b6' },
-      chain: 'goerli',
+      params: { account: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce' },
+      chain: 'fantom',
     });
 
   const getUsdcBalance
     = useApiContract({
       abi: abiIERC20,
-      address: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      address: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75',
       functionName: "balanceOf",
       params: { account: userAccount },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
   const getUsdiBalance
     = useApiContract({
-      abi: abiIERC20,
-      address: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+      abi: abiUSDI,
+      address: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
       functionName: "balanceOf",
       params: { account: userAccount },
-      chain: 'goerli',
+      chain: 'fantom',
     });
 
 
   const doWithdraw = useWeb3ExecuteFunction({
     abi: abiUSDI,
-    contractAddress: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+    contractAddress: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
     functionName: "withdraw",
     params: { usdc_amount: parseInt(number || '0') * 10 ** 6 },
 
@@ -145,7 +142,7 @@ export default function Deposit() {
 
   const doDeposit = useWeb3ExecuteFunction({
     abi: abiUSDI,
-    contractAddress: '0x43120a1c70A06b194eaB354d32089f630c43A4b6',
+    contractAddress: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
     functionName: "deposit",
     params: { usdc_amount: parseInt(number || '0') * 10 ** 6 },
 
@@ -153,12 +150,10 @@ export default function Deposit() {
 
   const doApprove = useWeb3ExecuteFunction({
     abi: abiIERC20,
-    contractAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+    contractAddress: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75',
     functionName: "approve",
-    params: { spender: "0x43120a1c70A06b194eaB354d32089f630c43A4b6", amount: parseInt(number || '0') * 10 ** 6 },
+    params: { spender: "0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce", amount: parseInt(number || '0') * 10 ** 6 },
   });
-
-
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -211,9 +206,12 @@ export default function Deposit() {
 
   console.log('START')
   console.log(userAccount)
+  console.log(getTotalSupply.data)
+  console.log(getUsdcReserve.data)
+  console.log(getUsdcBalance.data)
+  console.log(getUsdiBalance.data)
+  console.log(getReserveRatio.data)
   console.log(getInterestFactor.data)
-  console.log(getInterestFactor.error)
-  console.log(ethers.utils.parseUnits(reserveRatio.toString(), "wei"))
   console.log('END')
 
   return (
@@ -431,3 +429,28 @@ Curve: '0x1F770CCda0Ebaa907B9d2B17E6d318A9F036DB8e',
 ThreeLines: '0xbC86805A40C49a77eDaa81b06F1D0495cfa85Ed0',
 Oracle: '0x5A7E5b0b4FB20D5D9647b1615d85ec05cD1474a0',
 WethOracle: '0x5FFC0FEEE03ddBAAF8122c541bb02a716475043c' */
+
+
+/* USDC_WETH_CL: '0x11ddd3d147e5b83d01cee7070027092397d63658',
+USDC_WETH_POOL: '0x11ddd3d147e5b83d01cee7070027092397d63658',
+USDC_WBTC_CL: '0x8e94c22142f4a64b99022ccdd994f4e9ec86e4b4',
+USDC_WBTC_POOL: '0x8e94c22142f4a64b99022ccdd994f4e9ec86e4b4',
+USDC_WFTM_CL: '0xf4766552d15ae4d256ad41b6cf2933482b0680dc',
+USDC_WFTM_POOL: '0xf4766552d15ae4d256ad41b6cf2933482b0680dc',
+USDC_XBOO_CL: '0xc8c80c17f05930876ba7c1dd50d9186213496376',
+USDC_XBOO_POOL: '0xc8c80c17f05930876ba7c1dd50d9186213496376',
+USDC: '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75',
+WETH: '0x74b23882a30290451a17c44f4f05243b6b58c76d',
+WBTC: '0x321162cd933e2be498cd2267a90534a804051b11',
+WFTM: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+XBOO: '0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE',
+ProxyAdmin: '0x7196F37A4d2f6745F80da3cb727D636e40828DcC',
+VaultController: '0xd41f5846f04ace38c231163770466ed7BA1DfCBd',
+USDI: '0x82bFeD6abB57888365637Fad80DFC13C0F6e44ce',
+Curve: '0x1ecA0B0fd6B4356A4d947dD0D614e73A01d9Bf29',
+ThreeLines: '0x8161884FF27386800969D7025Ba9C397b68E720C',
+Oracle: '0xEFD28990607793077aa61C6a67F1E3B20dCCc70c',
+WethOracle: '0x646Ce0295a82a60D0e7CaD52E89aFD7F986aF54d',
+WbtcOracle: '0x48616AbF871E96e4854622ded97cA5D78b033fDB',
+WftmOracle: '0xFDa288eF53Dd1dCa3f5A548367174D591ea1B1c5',
+XbooOracle: '0xe57E99c57242d0d245eF7789432168108Cf79c79' */
